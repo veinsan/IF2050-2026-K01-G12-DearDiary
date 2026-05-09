@@ -1,10 +1,10 @@
--- Hapus tabel lama jika sudah ada. Urutan mengikuti ketergantungan foreign key.
+-- Drop existing tables in dependency order to allow clean re-initialization.
 DROP TABLE IF EXISTS prototipe        CASCADE;
 DROP TABLE IF EXISTS log_eksperimen   CASCADE;
 DROP TABLE IF EXISTS ide_inovasi      CASCADE;
 DROP TABLE IF EXISTS pengguna         CASCADE;
 
--- Tabel akun pengguna sistem.
+-- System user accounts with role-based access control.
 CREATE TABLE pengguna (
     username    VARCHAR(50)  PRIMARY KEY,
     password    VARCHAR(255) NOT NULL,
@@ -12,15 +12,13 @@ CREATE TABLE pengguna (
                     CHECK (role IN ('Researcher', 'Tim R&D'))
 );
 
-COMMENT ON TABLE  pengguna          IS 'Akun pengguna sistem DeDi (Researcher dan Tim R&D)';
-COMMENT ON COLUMN pengguna.username IS 'Identifier unik milik akun pengguna';
-COMMENT ON COLUMN pengguna.password IS 'Kata sandi akun pengguna';
-COMMENT ON COLUMN pengguna.role     IS 'Peran pengguna: Researcher (CRUD) atau Tim R&D (view-only)';
+COMMENT ON TABLE  pengguna      IS 'System user accounts for the DeDi application';
+COMMENT ON COLUMN pengguna.role IS 'Access role: Researcher (full CRUD) or Tim R&D (read-only)';
 
--- Tabel data utama ide inovasi.
+-- Core entity representing an innovation project.
 CREATE TABLE ide_inovasi (
     id_ide              SERIAL       PRIMARY KEY,
-    kode_inovasi        VARCHAR(30)  NOT NULL UNIQUE,   -- Digenerate otomatis saat insert, lalu read-only
+    kode_inovasi        VARCHAR(30)  NOT NULL UNIQUE,
     judul               VARCHAR(255) NOT NULL,
     penulis             VARCHAR(100) NOT NULL,
     kategori            VARCHAR(100) NOT NULL,
@@ -33,19 +31,12 @@ CREATE TABLE ide_inovasi (
                             CHECK (prioritas IN ('Rendah', 'Sedang', 'Tinggi'))
 );
 
-COMMENT ON TABLE  ide_inovasi                  IS 'Data utama proyek inovasi (UC02, UC03, UC04, UC05)';
-COMMENT ON COLUMN ide_inovasi.id_ide           IS 'Primary key auto-increment';
-COMMENT ON COLUMN ide_inovasi.kode_inovasi     IS 'Kode unik yang digenerate otomatis sistem dan bersifat read-only setelah dibuat';
-COMMENT ON COLUMN ide_inovasi.judul            IS 'Judul ide inovasi';
-COMMENT ON COLUMN ide_inovasi.penulis          IS 'Nama pencetus ide inovasi';
-COMMENT ON COLUMN ide_inovasi.kategori         IS 'Kategori proyek inovasi';
-COMMENT ON COLUMN ide_inovasi.deskripsi        IS 'Deskripsi rinci ide inovasi';
-COMMENT ON COLUMN ide_inovasi.tanggal_dibuat   IS 'Tanggal pembuatan yang digenerate otomatis oleh sistem';
-COMMENT ON COLUMN ide_inovasi.status           IS 'Status siklus hidup: ToDo, OnGoing, atau Done';
-COMMENT ON COLUMN ide_inovasi.penanggung_jawab IS 'Nama penanggung jawab proyek';
-COMMENT ON COLUMN ide_inovasi.prioritas        IS 'Tingkat prioritas: Rendah, Sedang, atau Tinggi';
+COMMENT ON TABLE  ide_inovasi              IS 'Innovation projects (UC02-UC05)';
+COMMENT ON COLUMN ide_inovasi.kode_inovasi IS 'System-generated unique code, immutable after creation';
+COMMENT ON COLUMN ide_inovasi.status       IS 'Lifecycle stage: ToDo, OnGoing, or Done';
+COMMENT ON COLUMN ide_inovasi.prioritas    IS 'Priority level: Rendah, Sedang, or Tinggi';
 
--- Tabel log eksperimen per ide inovasi.
+-- Experiment activity log linked to an innovation project.
 CREATE TABLE log_eksperimen (
     id_log              SERIAL       PRIMARY KEY,
     id_ide              INT          NOT NULL
@@ -55,45 +46,33 @@ CREATE TABLE log_eksperimen (
     hasil               TEXT,
     kesimpulan          TEXT,
     detail_eksperimen   TEXT,
-    path_lampiran       VARCHAR(500)          -- Path lokal file gambar (.png/.jpg, maks. 5 MB)
+    path_lampiran       VARCHAR(500)
 );
 
-COMMENT ON TABLE  log_eksperimen                   IS 'Log aktivitas eksperimen per ide inovasi (UC06)';
-COMMENT ON COLUMN log_eksperimen.id_log            IS 'Primary key auto-increment';
-COMMENT ON COLUMN log_eksperimen.id_ide            IS 'Foreign key ke ide_inovasi';
-COMMENT ON COLUMN log_eksperimen.tanggal           IS 'Tanggal pelaksanaan eksperimen';
-COMMENT ON COLUMN log_eksperimen.tujuan            IS 'Tujuan eksperimen';
-COMMENT ON COLUMN log_eksperimen.hasil             IS 'Hasil eksperimen';
-COMMENT ON COLUMN log_eksperimen.kesimpulan        IS 'Kesimpulan dari eksperimen';
-COMMENT ON COLUMN log_eksperimen.detail_eksperimen IS 'Catatan teknis tambahan';
-COMMENT ON COLUMN log_eksperimen.path_lampiran     IS 'Path absolut atau relatif file gambar di sistem berkas lokal (maks. 5 MB)';
+COMMENT ON TABLE  log_eksperimen               IS 'Experiment logs per innovation project (UC06)';
+COMMENT ON COLUMN log_eksperimen.path_lampiran IS 'Local filesystem path to image attachment (.png/.jpg, max 5 MB)';
 
--- Tabel riwayat versi prototipe.
+-- Append-only version history for prototypes; rollback is not supported.
 CREATE TABLE prototipe (
     id_prototipe        SERIAL       PRIMARY KEY,
     id_ide              INT          NOT NULL
                             REFERENCES ide_inovasi(id_ide) ON DELETE CASCADE,
-    versi               VARCHAR(20)  NOT NULL,           -- Contoh: v1.0, v1.1
+    versi               VARCHAR(20)  NOT NULL,
     status              VARCHAR(50),
     deskripsi_perubahan TEXT,
     tanggal_perubahan   DATE         NOT NULL DEFAULT CURRENT_DATE
 );
 
-COMMENT ON TABLE  prototipe                        IS 'Riwayat versi prototipe per ide inovasi (UC07), bersifat historis tanpa rollback';
-COMMENT ON COLUMN prototipe.id_prototipe           IS 'Primary key auto-increment';
-COMMENT ON COLUMN prototipe.id_ide                 IS 'Foreign key ke ide_inovasi';
-COMMENT ON COLUMN prototipe.versi                  IS 'Nomor versi prototipe, misalnya v1.0 atau v1.1';
-COMMENT ON COLUMN prototipe.status                 IS 'Status progres prototipe pada versi ini';
-COMMENT ON COLUMN prototipe.deskripsi_perubahan    IS 'Deskripsi perubahan yang dilakukan pada versi ini';
-COMMENT ON COLUMN prototipe.tanggal_perubahan      IS 'Tanggal pencatatan versi';
+COMMENT ON TABLE  prototipe       IS 'Append-only prototype version history per innovation project (UC07)';
+COMMENT ON COLUMN prototipe.versi IS 'Semantic version label, e.g. v1.0, v1.1';
 
--- Index untuk mempercepat pencarian dan penyaringan data.
+-- Indexes on frequently filtered and joined columns.
 CREATE INDEX idx_ide_status   ON ide_inovasi (status);
 CREATE INDEX idx_ide_kategori ON ide_inovasi (kategori);
 CREATE INDEX idx_log_id_ide   ON log_eksperimen (id_ide);
 CREATE INDEX idx_proto_id_ide ON prototipe (id_ide);
 
--- Data awal untuk pengujian.
+-- Seed data for development and testing.
 INSERT INTO pengguna (username, password, role) VALUES
     ('researcher1', 'password123', 'Researcher'),
     ('guest1',      'password123', 'Tim R&D');

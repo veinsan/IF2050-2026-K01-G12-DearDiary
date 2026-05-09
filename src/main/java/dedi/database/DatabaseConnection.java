@@ -5,15 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Singleton koneksi ke basis data PostgreSQL lokal.
+ * Singleton provider for the local PostgreSQL connection shared across
+ * all database access classes in the DeDi application.
  *
- * Digunakan oleh seluruh kelas database (IdeInovasiDatabase, dsb.)
- * untuk mendapatkan objek Connection tanpa duplikasi konfigurasi.
- *
- * Sesuai DPPL DeDi (DPPLOO-12):
- *   - DBMS    : PostgreSQL, berjalan lokal (offline)
- *   - KNF01   : Basis data lokal, akses hanya melalui aplikasi
- *   - KNF04   : Data tersimpan persisten di penyimpanan lokal
+ * Conforms to DPPLOO-12 (KNF01: local-only access, KNF04: persistent storage).
  */
 public class DatabaseConnection {
 
@@ -23,15 +18,13 @@ public class DatabaseConnection {
 
     private static Connection instance = null;
 
-    // Mencegah instantiasi langsung
     private DatabaseConnection() {}
 
     /**
-     * Mengembalikan instance koneksi tunggal ke basis data.
-     * Membuat koneksi baru apabila belum ada atau sudah tertutup.
+     * Returns the shared connection, reopening it if null or already closed.
      *
-     * @return objek Connection yang aktif
-     * @throws SQLException jika koneksi gagal dibuat
+     * @return an active {@link Connection} to the local database
+     * @throws SQLException if the connection cannot be established
      */
     public static Connection getInstance() throws SQLException {
         if (instance == null || instance.isClosed()) {
@@ -41,8 +34,8 @@ public class DatabaseConnection {
     }
 
     /**
-     * Menutup koneksi yang sedang aktif.
-     * Dipanggil saat aplikasi ditutup.
+     * Closes the active connection. Intended to be invoked during
+     * application shutdown to release database resources.
      */
     public static void closeConnection() {
         try {
