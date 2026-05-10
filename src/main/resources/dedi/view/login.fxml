@@ -5,25 +5,95 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefWidth="360" spacing="12"
-      xmlns="http://javafx.com/javafx/24"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="dedi.controller.LoginController">
-    <padding>
-        <Insets bottom="40" left="60" right="60" top="40"/>
-    </padding>
+<StackPane xmlns="http://javafx.com/javafx/24"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="dedi.controller.LoginController"
+           styleClass="root"
+           stylesheets="@../css/login.css">
 
-    <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="DearDiary"/>
+    <HBox prefWidth="Infinity"
+          prefHeight="Infinity"
+          styleClass="main-card">
 
-    <Label text="Username"/>
-    <TextField fx:id="usernameField" promptText="Masukkan username"/>
+        <!-- LEFT BRANDING PANEL -->
+        <VBox alignment="CENTER_LEFT"
+              spacing="20"
+              prefWidth="440"
+              styleClass="left-panel">
 
-    <Label text="Password"/>
-    <PasswordField fx:id="passwordField" promptText="Masukkan password"/>
+            <padding>
+                <Insets top="60" right="56" bottom="60" left="56"/>
+            </padding>
 
-    <Label fx:id="errorLabel" style="-fx-text-fill: red;" wrapText="true"/>
+            <Label text="DearDiary" styleClass="brand-mark"/>
 
-    <Button defaultButton="true" maxWidth="Infinity" onAction="#handleLogin" text="Masuk"/>
-</VBox>
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Label text="Innovation&#10;documented"
+                   styleClass="hero-title"/>
+
+            <Label text="Documenting innovation, one idea at a time."
+                   styleClass="hero-subtitle"
+                   wrapText="true"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Label text="© 2026 IF2050-K01-G12" styleClass="brand-footer"/>
+
+        </VBox>
+
+        <!-- RIGHT FORM PANEL -->
+        <VBox alignment="CENTER"
+              spacing="22"
+              prefWidth="440"
+              styleClass="login-panel">
+
+            <padding>
+                <Insets top="60" right="64" bottom="60" left="64"/>
+            </padding>
+
+            <VBox spacing="6" maxWidth="312">
+                <Label text="Welcome back" styleClass="login-title"/>
+                <Label text="Sign in to continue to your workspace."
+                       styleClass="login-subtitle"
+                       wrapText="true"/>
+            </VBox>
+
+            <VBox spacing="6" maxWidth="312">
+                <Label text="USERNAME" styleClass="input-label"/>
+                <TextField fx:id="usernameField"
+                           promptText="Masukkan username"
+                           styleClass="form-field"/>
+            </VBox>
+
+            <VBox spacing="6" maxWidth="312">
+                <Label text="PASSWORD" styleClass="input-label"/>
+                <PasswordField fx:id="passwordField"
+                               promptText="Masukkan password"
+                               styleClass="form-field"/>
+            </VBox>
+
+            <Label fx:id="errorLabel"
+                   styleClass="error-label"
+                   wrapText="true"
+                   visible="false"
+                   managed="false"
+                   maxWidth="312"/>
+
+            <Button text="Sign In"
+                    maxWidth="312"
+                    prefWidth="312"
+                    defaultButton="true"
+                    onAction="#handleLogin"
+                    styleClass="primary-button"/>
+
+        </VBox>
+
+    </HBox>
+
+</StackPane>

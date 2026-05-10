@@ -17,9 +17,27 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/dedi/view/login.fxml"));
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/dedi/view/login.fxml")
+        );
+
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root, 880, 560);
+
+        scene.getStylesheets().add(
+                getClass()
+                        .getResource("/dedi/css/login.css")
+                        .toExternalForm()
+        );
+
         stage.setTitle("DearDiary");
-        stage.setScene(new Scene(root));
+
+        stage.setResizable(false);
+        stage.centerOnScreen();
+
+        stage.setScene(scene);
         stage.show();
     }
 
