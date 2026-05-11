@@ -2,14 +2,13 @@ package dedi.controller;
 
 import dedi.model.AuthModel;
 import dedi.model.Pengguna;
+import dedi.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -55,8 +54,7 @@ public class LoginController {
     private void navigateToDashboard() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/dedi/view/dashboard.fxml"));
-            Stage stage = (Stage) usernameField.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Main.switchRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
             errorLabel.setText("Gagal memuat halaman dashboard.");

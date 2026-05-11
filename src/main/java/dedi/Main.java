@@ -7,36 +7,38 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * JavaFX entry point for the DeDi desktop application.
- *
- * <p>Loads {@code login.fxml} on startup and releases the shared
- * {@link DatabaseConnection} on shutdown.
- */
 public class Main extends Application {
+
+    private static Stage primaryStage;
+
+    /**
+     * Swaps the scene's root without touching the Stage — window size and
+     * maximized state are preserved automatically across every page transition.
+     */
+    public static void switchRoot(Parent newRoot) {
+        primaryStage.getScene().setRoot(newRoot);
+    }
+
+    /** Returns the primary stage (for logout resize-to-login). */
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
+        primaryStage = stage;
 
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/dedi/view/login.fxml")
-        );
+        Parent root = FXMLLoader.load(
+                getClass().getResource("/dedi/view/login.fxml"));
 
-        Parent root = loader.load();
-
+        // login.fxml declares stylesheets="@../css/login.css" on its root node,
+        // so the Scene itself carries no stylesheet — when the root is swapped the
+        // login styles leave with it and each screen's own styles take over.
         Scene scene = new Scene(root, 880, 560);
 
-        scene.getStylesheets().add(
-                getClass()
-                        .getResource("/dedi/css/login.css")
-                        .toExternalForm()
-        );
-
         stage.setTitle("DearDiary");
-
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.centerOnScreen();
-
         stage.setScene(scene);
         stage.show();
     }
