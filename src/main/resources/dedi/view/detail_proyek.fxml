@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/24"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dedi.view.DetailProyekView"
+            stylesheets="@../css/app.css">
+
+    <!-- ===== Top navigation bar ===== -->
+    <top>
+        <HBox styleClass="navbar">
+            <Label text="DearDiary" styleClass="nav-brand"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="← Kembali" styleClass="back-button" onAction="#handleBack"/>
+        </HBox>
+    </top>
+
+    <!-- ===== Scrollable detail body ===== -->
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
+            <VBox styleClass="content-area" spacing="16">
+
+                <!-- ── Page heading + action buttons ── -->
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label fx:id="judulLabel" styleClass="page-title" wrapText="true"
+                           HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button fx:id="editButton"
+                            text="Edit"
+                            styleClass="secondary-button"
+                            onAction="#handleEdit"/>
+                    <Button fx:id="deleteButton"
+                            text="Hapus"
+                            styleClass="danger-button"
+                            onAction="#handleDelete"/>
+                    <Button text="Export PDF"
+                            styleClass="secondary-button"
+                            onAction="#handleExportPdf"/>
+                </HBox>
+
+                <!-- ── Innovation attribute card ── -->
+                <VBox styleClass="card" spacing="0">
+                    <Label text="DETAIL IDE INOVASI" styleClass="section-title"
+                           style="-fx-padding: 0 0 16 0;"/>
+
+                    <!-- 3-column grid: each cell is a VBox(label, value) -->
+                    <GridPane hgap="24" vgap="16">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.3"/>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.3"/>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.3"/>
+                        </columnConstraints>
+
+                        <!-- Row 0: Kode / Penulis -->
+                        <VBox spacing="3" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                            <Label text="KODE INOVASI" styleClass="field-label"/>
+                            <Label fx:id="kodeInovasiLabel" styleClass="field-value-readonly"/>
+                        </VBox>
+                        <VBox spacing="3" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                            <Label text="PENULIS" styleClass="field-label"/>
+                            <Label fx:id="penulisLabel" styleClass="field-value"/>
+                        </VBox>
+
+                        <!-- Row 1: Kategori / Penanggung Jawab -->
+                        <VBox spacing="3" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                            <Label text="KATEGORI" styleClass="field-label"/>
+                            <Label fx:id="kategoriLabel" styleClass="field-value"/>
+                        </VBox>
+                        <VBox spacing="3" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                            <Label text="PENANGGUNG JAWAB" styleClass="field-label"/>
+                            <Label fx:id="penanggungJawabLabel" styleClass="field-value"/>
+                        </VBox>
+
+                        <!-- Row 2: Status / Prioritas / Tanggal -->
+                        <VBox spacing="3" GridPane.rowIndex="2" GridPane.columnIndex="0">
+                            <Label text="STATUS" styleClass="field-label"/>
+                            <Label fx:id="statusLabel" styleClass="field-value"/>
+                        </VBox>
+                        <VBox spacing="3" GridPane.rowIndex="2" GridPane.columnIndex="1">
+                            <Label text="PRIORITAS" styleClass="field-label"/>
+                            <Label fx:id="prioritasLabel" styleClass="field-value"/>
+                        </VBox>
+                        <VBox spacing="3" GridPane.rowIndex="2" GridPane.columnIndex="2">
+                            <Label text="TANGGAL DIBUAT" styleClass="field-label"/>
+                            <Label fx:id="tanggalDibuatLabel" styleClass="field-value"/>
+                        </VBox>
+
+                        <!-- Row 3: Deskripsi (full width) -->
+                        <VBox spacing="3" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                              GridPane.columnSpan="3">
+                            <Label text="DESKRIPSI" styleClass="field-label"/>
+                            <Label fx:id="deskripsiLabel" styleClass="field-value"
+                                   wrapText="true" maxWidth="Infinity"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- ── Log Eksperimen section ── -->
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="Log Eksperimen" styleClass="section-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="tambahLogButton"
+                            text="+ Tambah Log"
+                            styleClass="secondary-button"
+                            onAction="#handleTambahLog"/>
+                </HBox>
+
+                <Label fx:id="emptyLogLabel"
+                       text="Belum ada log eksperimen untuk proyek ini."
+                       styleClass="empty-label"
+                       visible="false" managed="false"/>
+
+                <ListView fx:id="logListView"
+                          styleClass="data-list"
+                          prefHeight="160"
+                          visible="false" managed="false"/>
+
+                <!-- ── Riwayat Prototipe section ── -->
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="Riwayat Prototipe" styleClass="section-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="tambahProtoButton"
+                            text="+ Tambah Prototipe"
+                            styleClass="secondary-button"
+                            onAction="#handleTambahPrototipe"/>
+                </HBox>
+
+                <Label fx:id="emptyProtoLabel"
+                       text="Belum ada riwayat prototipe untuk proyek ini."
+                       styleClass="empty-label"
+                       visible="false" managed="false"/>
+
+                <ListView fx:id="prototipeListView"
+                          styleClass="data-list"
+                          prefHeight="160"
+                          visible="false" managed="false"/>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
