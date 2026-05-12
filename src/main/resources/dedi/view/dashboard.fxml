@@ -54,6 +54,12 @@
                 <Button text="Saring"
                         styleClass="secondary-button"
                         onAction="#handleFilter"/>
+                <Button text="Reset"
+                        styleClass="secondary-button"
+                        onAction="#handleResetFilter"/>
+                <Button text="Export PDF"
+                        styleClass="secondary-button"
+                        onAction="#handleExportPdf"/>
                 <Button fx:id="tambahIdeButton"
                         text="+ Tambah Ide"
                         styleClass="primary-button"

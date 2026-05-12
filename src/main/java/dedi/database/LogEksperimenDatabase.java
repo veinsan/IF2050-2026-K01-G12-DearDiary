@@ -20,7 +20,8 @@ public class LogEksperimenDatabase {
             while (rs.next()) {
                 list.add(new LogEksperimen(rs.getInt("id_log"), rs.getInt("id_ide"), 
                     rs.getDate("tanggal").toLocalDate(), rs.getString("tujuan"), 
-                    rs.getString("hasil"), rs.getString("kesimpulan"), rs.getString("path_lampiran")));
+                    rs.getString("hasil"), rs.getString("kesimpulan"),
+                    rs.getString("detail_eksperimen"), rs.getString("path_lampiran")));
             }
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
@@ -34,14 +35,15 @@ public class LogEksperimenDatabase {
             e.printStackTrace();
             return;
         }
-        String sql = "INSERT INTO log_eksperimen (id_ide, tanggal, tujuan, hasil, kesimpulan, path_lampiran) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO log_eksperimen (id_ide, tanggal, tujuan, hasil, kesimpulan, detail_eksperimen, path_lampiran) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, log.getIdIde());
             pstmt.setDate(2, Date.valueOf(log.getTanggal()));
             pstmt.setString(3, log.getTujuan());
             pstmt.setString(4, log.getHasil());
             pstmt.setString(5, log.getKesimpulan());
-            pstmt.setString(6, log.getPathLampiran());
+            pstmt.setString(6, log.getDetailEksperimenText());
+            pstmt.setString(7, log.getPathLampiran());
             pstmt.executeUpdate();
         } catch (SQLException e) { e.printStackTrace(); }
     }

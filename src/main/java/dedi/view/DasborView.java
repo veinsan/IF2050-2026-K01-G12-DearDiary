@@ -7,9 +7,11 @@ import java.util.ResourceBundle;
 
 import dedi.Main;
 import dedi.controller.LoginController;
+import dedi.controller.LaporanController;
 import dedi.controller.PencarianController;
 import dedi.controller.PenyaringanController;
 import dedi.model.IdeInovasi;
+import dedi.model.LaporanPDF;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +24,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
+import java.io.File;
 
 public class DasborView implements Initializable {
 
@@ -101,6 +106,47 @@ public class DasborView implements Initializable {
     }
 
     @FXML
+    private void handleResetFilter() {
+        searchField.clear();
+        filterKategoriField.clear();
+        filterStatusCombo.getSelectionModel().selectFirst();
+        loadDaftarIde();
+    }
+
+    @FXML
+    private void handleExportPdf() {
+        if (daftarIdeListView.getItems().isEmpty()) {
+            showAlert("Peringatan", "Tidak ada data untuk diekstrak.");
+            return;
+        }
+
+        IdeInovasi selected = daftarIdeListView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Peringatan", "Pilih satu ide inovasi pada tabel terlebih dahulu.");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Simpan Laporan PDF");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+        );
+        fileChooser.setInitialFileName("Laporan_" + selected.getKodeInovasi() + ".pdf");
+
+        File file = fileChooser.showSaveDialog(daftarIdeListView.getScene().getWindow());
+        if (file == null) {
+            return;
+        }
+
+        try {
+            LaporanPDF laporan = new LaporanController().export(selected.getIdIde(), file);
+            showAlert("Sukses", "PDF berhasil disimpan di:\n" + laporan.getFullPath());
+        } catch (Exception e) {
+            showAlert("Gagal", e.getMessage());
+        }
+    }
+
+    @FXML
     private void handleTambahIde() {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -141,6 +187,14 @@ public class DasborView implements Initializable {
 
     private void loadDaftarIde() {
         daftarIdeListView.getItems().setAll(pencarianController.muatSemuaIde());
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private static String nvl(String s) {

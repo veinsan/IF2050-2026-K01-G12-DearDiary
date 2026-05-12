@@ -266,10 +266,11 @@ public class DetailProyekView {
             showErrorAlert("Tidak ada proyek yang dipilih.");
             return;
         }
-    LogEksperimenView logView = new LogEksperimenView();
-    new LogEksperimenController(logView, currentIde.getIdIde());
+        LogEksperimenView logView = new LogEksperimenView();
+        new LogEksperimenController(logView, currentIde.getIdIde());
 
         javafx.scene.Scene scene = new javafx.scene.Scene(logView);
+        scene.getStylesheets().add(getClass().getResource("/dedi/css/app.css").toExternalForm());
         javafx.stage.Stage stage = new javafx.stage.Stage();
         stage.setTitle("Tambah Log Eksperimen");
         stage.setScene(scene);

@@ -39,7 +39,8 @@ public class IdeInovasiDatabase {
 
     private static final String SEARCH_SQL =
         "SELECT " + COLUMNS + " FROM ide_inovasi " +
-        "WHERE judul ILIKE ? OR kode_inovasi ILIKE ? OR penulis ILIKE ? OR deskripsi ILIKE ? " +
+        "WHERE judul ILIKE ? OR deskripsi ILIKE ? OR kategori ILIKE ? " +
+        "OR kode_inovasi ILIKE ? OR penulis ILIKE ? " +
         "ORDER BY id_ide";
 
     /**
@@ -135,9 +136,10 @@ public class IdeInovasiDatabase {
     }
 
     /**
-     * Case-insensitive substring search over {@code judul}, {@code kode_inovasi},
-     * {@code penulis}, and {@code deskripsi}. A {@code null} or empty keyword
-     * matches every row.
+     * Case-insensitive substring search over {@code judul}, {@code deskripsi},
+     * and {@code kategori}. The category field is treated as the document's
+     * "topik" dimension because the persisted model has no separate topik
+     * column. A {@code null} or empty keyword matches every row.
      */
     public List<IdeInovasi> cariIde(String keyword) {
         String pattern = "%" + (keyword == null ? "" : keyword) + "%";
@@ -149,6 +151,7 @@ public class IdeInovasiDatabase {
                 ps.setString(2, pattern);
                 ps.setString(3, pattern);
                 ps.setString(4, pattern);
+                ps.setString(5, pattern);
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         rows.add(mapRow(rs));

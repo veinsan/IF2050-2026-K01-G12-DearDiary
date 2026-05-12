@@ -4,12 +4,19 @@ import java.time.LocalDate;
 public class LogEksperimen {
     private int idLog, idIde;
     private LocalDate tanggal;
-    private String tujuan, hasil, kesimpulan, pathLampiran;
+    private String tujuan, hasil, kesimpulan, detailEksperimen, pathLampiran;
 
     public LogEksperimen() {}
+
     public LogEksperimen(int idLog, int idIde, LocalDate tanggal, String tujuan, String hasil, String kesimpulan, String pathLampiran) {
+        this(idLog, idIde, tanggal, tujuan, hasil, kesimpulan, null, pathLampiran);
+    }
+
+    public LogEksperimen(int idLog, int idIde, LocalDate tanggal, String tujuan, String hasil, String kesimpulan,
+                         String detailEksperimen, String pathLampiran) {
         this.idLog = idLog; this.idIde = idIde; this.tanggal = tanggal;
-        this.tujuan = tujuan; this.hasil = hasil; this.kesimpulan = kesimpulan; this.pathLampiran = pathLampiran;
+        this.tujuan = tujuan; this.hasil = hasil; this.kesimpulan = kesimpulan;
+        this.detailEksperimen = detailEksperimen; this.pathLampiran = pathLampiran;
     }
 
     // Getters and Setters
@@ -25,6 +32,8 @@ public class LogEksperimen {
     public void setHasil(String hasil) { this.hasil = hasil; }
     public String getKesimpulan() { return kesimpulan; }
     public void setKesimpulan(String kesimpulan) { this.kesimpulan = kesimpulan; }
+    public String getDetailEksperimenText() { return detailEksperimen; }
+    public void setDetailEksperimenText(String detailEksperimen) { this.detailEksperimen = detailEksperimen; }
     public String getPathLampiran() { return pathLampiran; }
     public void setPathLampiran(String pathLampiran) { this.pathLampiran = pathLampiran; }
 
@@ -34,6 +43,7 @@ public class LogEksperimen {
      * 'hasil' field, falling back to 'tujuan' when hasil is null/empty.
      */
     public String getDetailEksperimen() {
+        if (detailEksperimen != null && !detailEksperimen.isBlank()) return detailEksperimen;
         if (hasil != null && !hasil.isBlank()) return hasil;
         if (tujuan != null && !tujuan.isBlank()) return tujuan;
         return "";

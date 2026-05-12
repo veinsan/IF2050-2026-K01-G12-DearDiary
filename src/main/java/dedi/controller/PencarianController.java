@@ -16,8 +16,9 @@ public class PencarianController {
     private final IdeInovasiDatabase db = new IdeInovasiDatabase();
 
     /**
-     * Searches innovation ideas by keyword across title, code, author, and
-     * description.
+     * Searches innovation ideas by keyword across title, description, and topic
+     * (represented by kategori in the current schema), with code/author kept as
+     * additional helpful matches.
      *
      * @param keyword the search term entered by the user
      * @return matching innovation ideas, or all ideas when the keyword is

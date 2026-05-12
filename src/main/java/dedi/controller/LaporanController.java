@@ -1,6 +1,7 @@
 package dedi.controller;
 
 import dedi.database.IdeInovasiDatabase;
+import dedi.database.DatabaseConnection;
 import dedi.database.LogEksperimenDatabase;
 import dedi.database.PrototipeDatabase;
 import dedi.model.IdeInovasi;
@@ -22,6 +23,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -76,6 +81,7 @@ public class LaporanController {
         if (cachedData.ide == null) {
             throw new IllegalStateException("Ide inovasi dengan ID '" + idIde + "' tidak ditemukan.");
         }
+        validateExtractableData(cachedData);
 
         File parent = targetFile.getParentFile();
         if (parent != null && !parent.exists()) {
@@ -93,11 +99,13 @@ public class LaporanController {
             throw new IllegalStateException("Gagal menulis PDF: " + e.getMessage(), e);
         }
 
-        return new LaporanPDF(
+        LaporanPDF laporan = new LaporanPDF(
             new File(dest).getName(),
             parent != null ? parent.getAbsolutePath() : "",
             LocalDateTime.now()
         );
+        simpanMetadata(idIde, laporan);
+        return laporan;
     }
 
     /**
@@ -113,6 +121,7 @@ public class LaporanController {
         if (cachedData.ide == null) {
             throw new IllegalStateException("Ide tidak ditemukan.");
         }
+        validateExtractableData(cachedData);
 
         String kode = cachedData.ide.getKodeInovasi();
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
@@ -126,7 +135,9 @@ public class LaporanController {
             throw new IllegalStateException("Gagal menulis PDF: " + e.getMessage(), e);
         }
 
-        return new LaporanPDF(target.getName(), directory.getAbsolutePath(), LocalDateTime.now());
+        LaporanPDF laporan = new LaporanPDF(target.getName(), directory.getAbsolutePath(), LocalDateTime.now());
+        simpanMetadata(idIde, laporan);
+        return laporan;
     }
 
     public ReportData getCachedData() {
@@ -145,6 +156,30 @@ public class LaporanController {
             logs != null ? logs : Collections.emptyList(),
             protos != null ? protos : Collections.emptyList()
         );
+    }
+
+    private void validateExtractableData(ReportData data) {
+        if ((data.logs == null || data.logs.isEmpty())
+            && (data.prototypes == null || data.prototypes.isEmpty())) {
+            throw new IllegalStateException("Tidak ada data untuk diekstrak.");
+        }
+    }
+
+    private void simpanMetadata(int idIde, LaporanPDF laporan) {
+        String sql = "INSERT INTO laporan_pdf (id_ide, nama_file, lokasi_penyimpanan, tanggal_generate) "
+            + "VALUES (?, ?, ?, ?)";
+        try {
+            Connection conn = DatabaseConnection.getInstance();
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, idIde);
+                ps.setString(2, laporan.getNamaFile());
+                ps.setString(3, laporan.getLokasiPenyimpanan());
+                ps.setTimestamp(4, Timestamp.valueOf(laporan.getTanggalGenerate()));
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.err.println("[LaporanController] metadata laporan_pdf tidak tersimpan: " + e.getMessage());
+        }
     }
 
     public static class ReportData {

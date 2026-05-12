@@ -73,7 +73,7 @@ public class DatabaseConnection {
         // Try to find the `pengguna` table (Postgres typically uses lowercase names)
         try (ResultSet rs = md.getTables(null, null, "pengguna", new String[] {"TABLE"})) {
             if (rs != null && rs.next()) {
-                // table exists - nothing to do
+                ensureAdditiveSchema(conn);
                 return;
             }
         }
@@ -114,6 +114,28 @@ public class DatabaseConnection {
                 // ignore
             }
             throw ex;
+        }
+    }
+
+    /**
+     * Applies additive-only migrations for databases created before newer
+     * deliverables added report metadata or richer log details.
+     */
+    private static void ensureAdditiveSchema(Connection conn) {
+        try (Statement st = conn.createStatement()) {
+            st.execute("ALTER TABLE log_eksperimen ADD COLUMN IF NOT EXISTS detail_eksperimen TEXT");
+            st.execute("""
+                CREATE TABLE IF NOT EXISTS laporan_pdf (
+                    id_laporan SERIAL PRIMARY KEY,
+                    id_ide INT NOT NULL REFERENCES ide_inovasi(id_ide) ON DELETE CASCADE,
+                    nama_file VARCHAR(255) NOT NULL,
+                    lokasi_penyimpanan VARCHAR(500) NOT NULL,
+                    tanggal_generate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                )
+                """);
+            st.execute("CREATE INDEX IF NOT EXISTS idx_laporan_id_ide ON laporan_pdf (id_ide)");
+        } catch (SQLException e) {
+            System.err.println("[DatabaseConnection] additive schema update failed: " + e.getMessage());
         }
     }
 }

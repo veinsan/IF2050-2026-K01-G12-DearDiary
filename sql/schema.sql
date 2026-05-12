@@ -1,6 +1,7 @@
 -- Drop existing tables in dependency order to allow clean re-initialization.
 DROP TABLE IF EXISTS prototipe        CASCADE;
 DROP TABLE IF EXISTS log_eksperimen   CASCADE;
+DROP TABLE IF EXISTS laporan_pdf      CASCADE;
 DROP TABLE IF EXISTS ide_inovasi      CASCADE;
 DROP TABLE IF EXISTS pengguna         CASCADE;
 
@@ -13,7 +14,8 @@ CREATE TABLE pengguna (
 );
 
 COMMENT ON TABLE  pengguna      IS 'System user accounts for the DeDi application';
-COMMENT ON COLUMN pengguna.role IS 'Access role: Researcher (full CRUD) or Tim R&D (read-only)';
+COMMENT ON COLUMN pengguna.password IS 'SHA-256 password digest in sha256$hex format';
+COMMENT ON COLUMN pengguna.role     IS 'Access role: Researcher (full CRUD) or Tim R&D (read-only)';
 
 -- Core entity representing an innovation project.
 CREATE TABLE ide_inovasi (
@@ -66,13 +68,26 @@ CREATE TABLE prototipe (
 COMMENT ON TABLE  prototipe       IS 'Append-only prototype version history per innovation project (UC07)';
 COMMENT ON COLUMN prototipe.versi IS 'Semantic version label, e.g. v1.0, v1.1';
 
+-- Generated PDF report metadata (UC10).
+CREATE TABLE laporan_pdf (
+    id_laporan          SERIAL       PRIMARY KEY,
+    id_ide              INT          NOT NULL
+                            REFERENCES ide_inovasi(id_ide) ON DELETE CASCADE,
+    nama_file           VARCHAR(255) NOT NULL,
+    lokasi_penyimpanan  VARCHAR(500) NOT NULL,
+    tanggal_generate    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+COMMENT ON TABLE laporan_pdf IS 'Metadata for exported PDF reports';
+
 -- Indexes on frequently filtered and joined columns.
 CREATE INDEX idx_ide_status   ON ide_inovasi (status);
 CREATE INDEX idx_ide_kategori ON ide_inovasi (kategori);
 CREATE INDEX idx_log_id_ide   ON log_eksperimen (id_ide);
 CREATE INDEX idx_proto_id_ide ON prototipe (id_ide);
+CREATE INDEX idx_laporan_id_ide ON laporan_pdf (id_ide);
 
 -- Seed data for development and testing.
 INSERT INTO pengguna (username, password, role) VALUES
-    ('researcher1', 'password123', 'Researcher'),
-    ('guest1',      'password123', 'Tim R&D');
+    ('researcher1', 'sha256$ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Researcher'),
+    ('guest1',      'sha256$ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Tim R&D');
