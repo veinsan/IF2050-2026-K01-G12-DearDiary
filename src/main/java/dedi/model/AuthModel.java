@@ -24,8 +24,15 @@ public class AuthModel {
      * Returns the {@link Pengguna} matching the given credentials, or
      * {@code null} if no row matches.
      */
+    private String lastErrorMessage = null;
+
+    public String getLastErrorMessage() {
+        return lastErrorMessage;
+    }
+
     public Pengguna getUserData(String username, String password) {
         try {
+            System.out.println("[AuthModel] lookup user: '" + username + "'");
             Connection conn = DatabaseConnection.getInstance();
             try (PreparedStatement ps = conn.prepareStatement(SELECT_LOGIN_SQL)) {
                 ps.setString(1, username);
@@ -38,10 +45,14 @@ public class AuthModel {
                             rs.getString("role")
                         );
                     }
+                    System.out.println("[AuthModel] no pengguna found for '" + username + "'");
+                    lastErrorMessage = null;
                     return null;
                 }
             }
         } catch (SQLException e) {
+            lastErrorMessage = e.getMessage();
+            System.out.println("[AuthModel] SQLException while looking up user '" + username + "': " + e.getMessage());
             e.printStackTrace();
             return null;
         }
