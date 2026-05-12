@@ -11,18 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Data-access methods for the {@code ide_inovasi} table (UC02-UC05).
- *
- * <p>Mapped {@link IdeInovasi} instances are returned with empty
- * {@code daftarLog} and {@code daftarPrototipe} collections; child rows are
- * populated by their respective DAOs when needed.
- *
- * <p>{@link SQLException} is caught and logged via {@code printStackTrace}.
- * Read methods return {@code null}/empty list on failure; write methods
- * return {@code false}. The underlying {@link Connection} is owned by
- * {@link DatabaseConnection} and must not be closed here.
- */
+
 public class IdeInovasiDatabase {
 
     private static final String COLUMNS =
