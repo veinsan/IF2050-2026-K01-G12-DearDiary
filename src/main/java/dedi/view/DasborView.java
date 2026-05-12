@@ -1,8 +1,13 @@
 package dedi.view;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
 import dedi.Main;
 import dedi.controller.LoginController;
-import dedi.database.IdeInovasiDatabase;
+import dedi.controller.PencarianController;
 import dedi.model.IdeInovasi;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -15,11 +20,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
 
 public class DasborView implements Initializable {
 
@@ -34,7 +34,7 @@ public class DasborView implements Initializable {
     @FXML private TextField                      searchField;
     @FXML private Button                         tambahIdeButton;
 
-    private final IdeInovasiDatabase db = new IdeInovasiDatabase();
+    private final PencarianController pencarianController = new PencarianController();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -77,7 +77,7 @@ public class DasborView implements Initializable {
     @FXML
     private void handleSearch() {
         String keyword = searchField.getText();
-        List<IdeInovasi> results = db.cariIde(keyword);
+        List<IdeInovasi> results = pencarianController.cariIde(keyword);
         daftarIdeListView.getItems().setAll(results);
     }
 
@@ -121,7 +121,7 @@ public class DasborView implements Initializable {
     }
 
     private void loadDaftarIde() {
-        daftarIdeListView.getItems().setAll(db.getDaftarIde());
+        daftarIdeListView.getItems().setAll(pencarianController.muatSemuaIde());
     }
 
     private static String nvl(String s) {
