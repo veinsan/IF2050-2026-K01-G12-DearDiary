@@ -1,7 +1,13 @@
 package dedi.view;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
 import dedi.Main;
 import dedi.controller.LoginController;
+import dedi.controller.PenyaringanController;
 import dedi.database.IdeInovasiDatabase;
 import dedi.model.IdeInovasi;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,16 +16,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
 
 public class DasborView implements Initializable {
 
@@ -32,9 +34,12 @@ public class DasborView implements Initializable {
     @FXML private TableColumn<IdeInovasi, String> statusCol;
     @FXML private TableColumn<IdeInovasi, String> prioritasCol;
     @FXML private TextField                      searchField;
+    @FXML private TextField                      filterKategoriField;
+    @FXML private ComboBox<String>               filterStatusCombo;
     @FXML private Button                         tambahIdeButton;
 
     private final IdeInovasiDatabase db = new IdeInovasiDatabase();
+    private final PenyaringanController penyaringanController = new PenyaringanController();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -71,6 +76,9 @@ public class DasborView implements Initializable {
             return row;
         });
 
+        filterStatusCombo.getItems().addAll("Semua", "ToDo", "OnGoing", "Done");
+        filterStatusCombo.getSelectionModel().selectFirst();
+
         loadDaftarIde();
     }
 
@@ -78,6 +86,17 @@ public class DasborView implements Initializable {
     private void handleSearch() {
         String keyword = searchField.getText();
         List<IdeInovasi> results = db.cariIde(keyword);
+        daftarIdeListView.getItems().setAll(results);
+    }
+
+    @FXML
+    private void handleFilter() {
+        String kategori = filterKategoriField.getText();
+        String status = filterStatusCombo.getValue();
+        if ("Semua".equals(status)) {
+            status = null;
+        }
+        List<IdeInovasi> results = penyaringanController.filterIde(kategori, status);
         daftarIdeListView.getItems().setAll(results);
     }
 
