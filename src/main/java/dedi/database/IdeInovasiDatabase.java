@@ -1,7 +1,5 @@
 package dedi.database;
 
-import dedi.model.IdeInovasi;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,18 +9,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Data-access methods for the {@code ide_inovasi} table (UC02-UC05).
- *
- * <p>Mapped {@link IdeInovasi} instances are returned with empty
- * {@code daftarLog} and {@code daftarPrototipe} collections; child rows are
- * populated by their respective DAOs when needed.
- *
- * <p>{@link SQLException} is caught and logged via {@code printStackTrace}.
- * Read methods return {@code null}/empty list on failure; write methods
- * return {@code false}. The underlying {@link Connection} is owned by
- * {@link DatabaseConnection} and must not be closed here.
- */
+import dedi.model.IdeInovasi;
+
 public class IdeInovasiDatabase {
 
     private static final String COLUMNS =
@@ -74,11 +62,6 @@ public class IdeInovasiDatabase {
         }
     }
 
-    /**
-     * Updates the row identified by {@code ide.getIdIde()}.
-     *
-     * @return {@code true} if a row was updated.
-     */
     public boolean updateIde(IdeInovasi ide) {
         try {
             Connection conn = DatabaseConnection.getInstance();
@@ -92,13 +75,6 @@ public class IdeInovasiDatabase {
         }
     }
 
-    /**
-     * Deletes the row with the given {@code id_ide}. Child rows in
-     * {@code log_eksperimen} and {@code prototipe} are removed by the
-     * schema's {@code ON DELETE CASCADE}.
-     *
-     * @return {@code true} if a row was deleted.
-     */
     public boolean deleteIde(int idIde) {
         try {
             Connection conn = DatabaseConnection.getInstance();
@@ -112,7 +88,7 @@ public class IdeInovasiDatabase {
         }
     }
 
-    /** Returns the row with the given {@code id_ide}, or {@code null} if none. */
+
     public IdeInovasi getById(int idIde) {
         try {
             Connection conn = DatabaseConnection.getInstance();
@@ -145,11 +121,6 @@ public class IdeInovasiDatabase {
         return rows;
     }
 
-    /**
-     * Case-insensitive substring search over {@code judul}, {@code kode_inovasi},
-     * {@code penulis}, and {@code deskripsi}. A {@code null} or empty keyword
-     * matches every row.
-     */
     public List<IdeInovasi> cariIde(String keyword) {
         String pattern = "%" + (keyword == null ? "" : keyword) + "%";
         List<IdeInovasi> rows = new ArrayList<>();
