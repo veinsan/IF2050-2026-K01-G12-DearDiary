@@ -39,9 +39,8 @@ public class PrototipeFormView implements Initializable {
     @FXML private TableView<Prototipe> tbl_prototipe;
     @FXML private TableColumn<Prototipe, String> colVersi;
     @FXML private TableColumn<Prototipe, String> colStatus;
-    @FXML private TableColumn<Prototipe, String> colTanggal;
     @FXML private TableColumn<Prototipe, String> colDeskripsi;
-
+    @FXML private TableColumn<Prototipe, String> colTanggal;
     @FXML private TextField txtVersi;
     @FXML private ComboBox<String> choiceStatus;
     @FXML private TextArea txt_deskripsi_perubahan;
@@ -150,7 +149,7 @@ public class PrototipeFormView implements Initializable {
      */
     @FXML
     private void handleBatal() {
-        /* try {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/dedi/view/detail_proyek.fxml"));
             Parent root = loader.load();
             DetailProyekView view = loader.getController();
@@ -159,9 +158,6 @@ public class PrototipeFormView implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Masih di comment soalnya DetailProyekView masih di branch azqi*/
-
-        System.out.println("Tombol batal dipencet! (Navigasi dimatikan sementara)");
     }
 
     /**

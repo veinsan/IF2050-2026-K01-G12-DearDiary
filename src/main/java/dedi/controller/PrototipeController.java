@@ -50,10 +50,6 @@ public class PrototipeController {
                 prototipe.setStatus(result.getString("status"));
                 prototipe.setDeskripsiPerubahan(result.getString("deskripsi_perubahan"));
 
-                if (result.getDate("tanggal_perubahan") != null) {
-                    prototipe.setTanggalPerubahan(result.getDate("tanggal_perubahan").toLocalDate());
-                }
-
                 daftarRiwayat.add(prototipe);
             }
         } catch (SQLException e){
@@ -71,7 +67,7 @@ public class PrototipeController {
      * @return {@code true} if the data is successfully saved to the database, {@code false} otherwise.
      */
     public boolean manageVersi(Prototipe prototipeBaru) {
-        String query = "INSERT INTO prototipe (id_ide, versi, status, deskripsi_perubahan, tanggal_perubahan) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO prototipe (id_ide, versi, status, deskripsi_perubahan) VALUES (?, ?, ?, ?)";
 
         try {
             Connection connection = DatabaseConnection.getInstance();
@@ -82,7 +78,6 @@ public class PrototipeController {
             preparedStatement.setString(3, prototipeBaru.getStatus());
             preparedStatement.setString(4, prototipeBaru.getDeskripsiPerubahan());
 
-            preparedStatement.setDate(5, java.sql.Date.valueOf(prototipeBaru.getTanggalPerubahan()));
 
             int barisBerubah = preparedStatement.executeUpdate();
 
