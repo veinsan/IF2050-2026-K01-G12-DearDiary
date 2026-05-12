@@ -7,12 +7,8 @@ import java.util.ResourceBundle;
 
 import dedi.Main;
 import dedi.controller.LoginController;
-<<<<<<< HEAD
 import dedi.controller.PencarianController;
-=======
 import dedi.controller.PenyaringanController;
-import dedi.database.IdeInovasiDatabase;
->>>>>>> feat/filter
 import dedi.model.IdeInovasi;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -42,12 +38,8 @@ public class DasborView implements Initializable {
     @FXML private ComboBox<String>               filterStatusCombo;
     @FXML private Button                         tambahIdeButton;
 
-<<<<<<< HEAD
     private final PencarianController pencarianController = new PencarianController();
-=======
-    private final IdeInovasiDatabase db = new IdeInovasiDatabase();
     private final PenyaringanController penyaringanController = new PenyaringanController();
->>>>>>> feat/filter
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
