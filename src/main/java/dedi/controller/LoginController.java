@@ -33,22 +33,41 @@ public class LoginController {
 
     @FXML
     private void handleLogin() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-
-        if (username == null || username.isBlank() || password == null || password.isBlank()) {
-            errorLabel.setText("Username dan password wajib diisi");
+        String username = usernameField.getText() == null ? "" : usernameField.getText().trim();
+        String password = passwordField.getText() == null ? "" : passwordField.getText().trim();
+        // Basic validation
+        if (username.isBlank() || password.isBlank()) {
+            showError("Username dan password wajib diisi");
             return;
         }
 
         Pengguna user = authModel.getUserData(username, password);
         if (user == null) {
-            errorLabel.setText("Username atau password salah.");
+            String dbErr = authModel.getLastErrorMessage();
+            if (dbErr != null) {
+                showError("Kesalahan database: " + dbErr);
+            } else {
+                showError("Username atau password salah.");
+            }
             return;
         }
 
+        // Successful login
+        clearError();
         currentUser = user;
         navigateToDashboard();
+    }
+
+    private void showError(String msg) {
+        errorLabel.setText(msg);
+        errorLabel.setVisible(true);
+        errorLabel.setManaged(true);
+    }
+
+    private void clearError() {
+        errorLabel.setText("");
+        errorLabel.setVisible(false);
+        errorLabel.setManaged(false);
     }
 
     private void navigateToDashboard() {
