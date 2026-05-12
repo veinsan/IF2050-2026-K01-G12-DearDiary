@@ -3,10 +3,12 @@ package dedi.view;
 import dedi.Main;
 import dedi.controller.DetailProyekController;
 import dedi.controller.IdeInovasiController;
+import dedi.controller.LaporanController;
 import dedi.controller.LoginController;
 import dedi.controller.LogEksperimenController;
 import dedi.view.LogEksperimenView;
 import dedi.model.IdeInovasi;
+import dedi.model.LaporanPDF;
 import dedi.model.LogEksperimen;
 import dedi.model.Prototipe;
 import javafx.fxml.FXML;
@@ -18,7 +20,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -303,11 +307,38 @@ public class DetailProyekView {
     /** Placeholder — PDF export uses iTextPDF and is a separate deliverable. */
     @FXML
     private void handleExportPdf() {
-        Alert info = new Alert(Alert.AlertType.INFORMATION);
-        info.setTitle("Export PDF");
-        info.setContentText("Fitur export PDF akan segera tersedia.");
-        info.showAndWait();
+        if (currentIde == null) {
+            showAlert("Peringatan", "Tidak ada ide yang dipilih.");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Simpan Laporan PDF");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+        );
+
+        // Default filename
+        String timestamp = java.time.LocalDateTime.now()
+            .format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+        fileChooser.setInitialFileName(
+            "Laporan_" + currentIde.getKodeInovasi() + "_" + timestamp + ".pdf"
+        );
+
+        File file = fileChooser.showSaveDialog(judulLabel.getScene().getWindow());
+        if (file == null) return; // user cancel
+
+        try {
+            LaporanController controller = new LaporanController();
+            LaporanPDF laporan = controller.export(currentIde.getIdIde(), file);
+
+            showAlert("Sukses", "PDF berhasil disimpan di:\n" + laporan.getFullPath());
+        } catch (Exception e) {
+            showAlert("Gagal", "Terjadi kesalahan: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+
 
     /* ------------------------------------------------------------------ */
     /* Helpers                                                             */
@@ -342,6 +373,14 @@ public class DetailProyekView {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Gagal Memuat Data");
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
+
+    private void showAlert(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
     }
