@@ -14,10 +14,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class LogEksperimenController {
     private static final long MAX_LAMPIRAN_BYTES = 5L * 1024L * 1024L;
+    private static final Path LAMPIRAN_DIR = Path.of(System.getProperty("user.dir"), "attachments", "logs");
 
     private LogEksperimenView view;
     private LogEksperimenDatabase db;
@@ -60,10 +65,19 @@ public class LogEksperimenController {
             return;
         }
 
+        String pathLampiran;
+        try {
+            pathLampiran = simpanSalinanLampiran(view.txtPath.getText());
+        } catch (IOException e) {
+            showError("Gagal menyimpan salinan lampiran gambar.");
+            e.printStackTrace();
+            return;
+        }
+
         LogEksperimen log = new LogEksperimen(
             0, idIdeAktif, LocalDate.now(), 
             view.txtTujuan.getText(), view.txtHasil.getText(), 
-            view.txtKesimpulan.getText(), view.txtDetail.getText(), view.txtPath.getText()
+            view.txtKesimpulan.getText(), view.txtDetail.getText(), pathLampiran
         );
         db.insertLog(log);
         clearFields();
@@ -159,6 +173,31 @@ public class LogEksperimenController {
             return "Ukuran berkas gambar maksimal 5 MB.";
         }
         return null;
+    }
+
+    private String simpanSalinanLampiran(String sourcePath) throws IOException {
+        if (sourcePath == null || sourcePath.isBlank()) {
+            return null;
+        }
+
+        File source = new File(sourcePath);
+        Files.createDirectories(LAMPIRAN_DIR);
+
+        String fileName = source.getName();
+        String extension = "";
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex >= 0) {
+            extension = fileName.substring(dotIndex).toLowerCase();
+            fileName = fileName.substring(0, dotIndex);
+        }
+
+        String safeName = fileName.replaceAll("[^A-Za-z0-9._-]", "_");
+        String timestamp = java.time.LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"));
+        Path target = LAMPIRAN_DIR.resolve("ide-" + idIdeAktif + "-" + timestamp + "-" + safeName + extension);
+
+        Files.copy(source.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        return target.toAbsolutePath().toString();
     }
 
     private void showError(String message) {

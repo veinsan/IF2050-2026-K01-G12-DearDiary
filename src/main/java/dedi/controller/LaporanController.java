@@ -265,7 +265,7 @@ public class LaporanController {
             return;
         }
 
-        PdfPTable table = new PdfPTable(new float[]{12, 22, 22, 22, 22});
+        PdfPTable table = new PdfPTable(new float[]{12, 18, 18, 18, 34});
         table.setWidthPercentage(100);
 
         String[] headers = {"Tanggal", "Tujuan", "Hasil", "Kesimpulan", "Lampiran"};
@@ -279,7 +279,7 @@ public class LaporanController {
             table.addCell(createCell(log.getTujuan()));
             table.addCell(createCell(log.getHasil()));
             table.addCell(createCell(log.getKesimpulan()));
-            table.addCell(createCell(orDefault(log.getPathLampiran())));
+            table.addCell(createLampiranCell(log.getPathLampiran()));
         }
 
         doc.add(table);
@@ -354,6 +354,35 @@ public class LaporanController {
 
     private PdfPCell createCell(String text) {
         return new PdfPCell(new Phrase(orDefault(text)));
+    }
+
+    private PdfPCell createLampiranCell(String path) {
+        PdfPCell cell = new PdfPCell();
+        String normalizedPath = path == null ? "" : path.trim();
+        if (normalizedPath.isEmpty()) {
+            cell.addElement(new Phrase("-"));
+            return cell;
+        }
+
+        File file = new File(normalizedPath);
+        if (!file.exists() || !file.isFile()) {
+            cell.addElement(new Phrase("Lampiran tidak ditemukan: " + file.getName()));
+            return cell;
+        }
+
+        try {
+            com.itextpdf.text.Image image = com.itextpdf.text.Image.getInstance(file.getAbsolutePath());
+            image.scaleToFit(130, 90);
+            image.setAlignment(Element.ALIGN_CENTER);
+            cell.addElement(image);
+            Paragraph caption = new Paragraph(file.getName(),
+                new Font(Font.FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.GRAY));
+            caption.setAlignment(Element.ALIGN_CENTER);
+            cell.addElement(caption);
+        } catch (Exception e) {
+            cell.addElement(new Phrase(file.getName()));
+        }
+        return cell;
     }
 
     private String orDefault(String text) {

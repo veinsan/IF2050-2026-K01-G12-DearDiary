@@ -2,9 +2,12 @@ package dedi.view;
 
 import dedi.model.LogEksperimen;
 import javafx.geometry.Insets;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import java.io.File;
 import java.time.LocalDate;
 
 public class LogEksperimenView extends VBox {
@@ -78,6 +81,47 @@ public class LogEksperimenView extends VBox {
         colKesimpulan.setPrefWidth(220);
         colDetail.setPrefWidth(240);
         colLampiran.setPrefWidth(260);
+        colLampiran.setCellValueFactory(data ->
+            new SimpleStringProperty(data.getValue().getPathLampiran()));
+        colLampiran.setCellFactory(column -> new TableCell<>() {
+            private final ImageView thumbnail = new ImageView();
+
+            {
+                thumbnail.setFitWidth(86);
+                thumbnail.setFitHeight(58);
+                thumbnail.setPreserveRatio(true);
+                thumbnail.setSmooth(true);
+                thumbnail.setOnMouseClicked(event -> {
+                    String path = getItem();
+                    if (path != null && !path.isBlank()) {
+                        showLampiranDetail(path);
+                    }
+                    event.consume();
+                });
+            }
+
+            @Override
+            protected void updateItem(String path, boolean empty) {
+                super.updateItem(path, empty);
+                if (empty || path == null || path.isBlank()) {
+                    setText("-");
+                    setGraphic(null);
+                    return;
+                }
+
+                File file = new File(path);
+                if (!file.exists()) {
+                    setText("Gambar tidak ditemukan");
+                    setGraphic(null);
+                    return;
+                }
+
+                thumbnail.setImage(new Image(file.toURI().toString(), true));
+                setText(null);
+                setGraphic(thumbnail);
+                setStyle("-fx-cursor: hand;");
+            }
+        });
         table.getColumns().add(colTgl);
         table.getColumns().add(colTujuan);
         table.getColumns().add(colHasil);
@@ -86,5 +130,33 @@ public class LogEksperimenView extends VBox {
         table.getColumns().add(colLampiran);
 
         getChildren().addAll(title, grid, feedbackLabel, buttons, table);
+    }
+
+    private void showLampiranDetail(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Lampiran Tidak Ditemukan");
+            alert.setHeaderText(null);
+            alert.setContentText("File lampiran tidak ditemukan:\n" + path);
+            alert.showAndWait();
+            return;
+        }
+
+        ImageView fullImage = new ImageView(new Image(file.toURI().toString()));
+        fullImage.setPreserveRatio(true);
+        fullImage.setFitWidth(720);
+        fullImage.setFitHeight(520);
+
+        Label fileName = new Label(file.getName());
+        fileName.getStyleClass().add("field-value-readonly");
+        VBox content = new VBox(12, fullImage, fileName);
+        content.setPadding(new Insets(12));
+
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Detail Lampiran");
+        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dialog.showAndWait();
     }
 }

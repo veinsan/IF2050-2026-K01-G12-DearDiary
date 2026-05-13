@@ -1,6 +1,7 @@
 # Maven
 target/
 *.class
+attachments/
 
 # IDE
 .idea/
