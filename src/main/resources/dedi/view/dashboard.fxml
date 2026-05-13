@@ -44,10 +44,6 @@
                 <Button text="Cari"
                         styleClass="secondary-button"
                         onAction="#handleSearch"/>
-                <TextField fx:id="filterKategoriField"
-                           styleClass="form-field"
-                           promptText="Filter kategori"
-                           prefWidth="180"/>
                 <ComboBox fx:id="filterStatusCombo"
                           prefWidth="140"
                           promptText="Semua status"/>

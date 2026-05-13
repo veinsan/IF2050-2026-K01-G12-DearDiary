@@ -39,7 +39,6 @@ public class DasborView implements Initializable {
     @FXML private TableColumn<IdeInovasi, String> statusCol;
     @FXML private TableColumn<IdeInovasi, String> prioritasCol;
     @FXML private TextField                      searchField;
-    @FXML private TextField                      filterKategoriField;
     @FXML private ComboBox<String>               filterStatusCombo;
     @FXML private Button                         tambahIdeButton;
 
@@ -96,19 +95,17 @@ public class DasborView implements Initializable {
 
     @FXML
     private void handleFilter() {
-        String kategori = filterKategoriField.getText();
         String status = filterStatusCombo.getValue();
         if ("Semua".equals(status)) {
             status = null;
         }
-        List<IdeInovasi> results = penyaringanController.filterIde(kategori, status);
+        List<IdeInovasi> results = penyaringanController.filterIde(null, status);
         daftarIdeListView.getItems().setAll(results);
     }
 
     @FXML
     private void handleResetFilter() {
         searchField.clear();
-        filterKategoriField.clear();
         filterStatusCombo.getSelectionModel().selectFirst();
         loadDaftarIde();
     }
