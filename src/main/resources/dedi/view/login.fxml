@@ -24,6 +24,7 @@
         <VBox alignment="CENTER_LEFT"
               spacing="20"
               prefWidth="440"
+              HBox.hgrow="ALWAYS"
               styleClass="left-panel">
 
             <padding>
@@ -51,6 +52,7 @@
         <VBox alignment="CENTER"
               spacing="22"
               prefWidth="440"
+              HBox.hgrow="ALWAYS"
               styleClass="login-panel">
 
             <padding>
