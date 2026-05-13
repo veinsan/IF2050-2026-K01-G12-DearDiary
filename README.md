@@ -1,8 +1,8 @@
 # DearDiary (DeDi)
 
-Aplikasi desktop berbasis JavaFX untuk mendokumentasikan proyek inovasi internal: dari pengelolaan ide inovasi, pencatatan log eksperimen, riwayat versi prototipe, hingga ekspor laporan ke PDF. Seluruh data disimpan secara lokal pada basis data PostgreSQL tanpa ketergantungan layanan jaringan (sesuai KNF01 — *local only*).
+Aplikasi desktop berbasis JavaFX untuk mendokumentasikan proyek inovasi internal: dari pengelolaan ide inovasi, pencatatan log eksperimen, riwayat versi prototipe, hingga ekspor laporan ke PDF. Seluruh data disimpan secara lokal pada basis data PostgreSQL tanpa ketergantungan layanan jaringan (sesuai KNF01 - *local only*).
 
-Aplikasi ini merupakan tugas mata kuliah **IF2050 Pengembangan Perangkat Lunak (2026, Kelas K01, Kelompok G12)**.
+Aplikasi ini merupakan tugas besar mata kuliah **IF2050 Pengembangan Perangkat Lunak (2026, Kelas K01, Kelompok G12)**.
 
 ## 1. Prasyarat dan Instalasi
 
@@ -16,11 +16,11 @@ Aplikasi ini merupakan tugas mata kuliah **IF2050 Pengembangan Perangkat Lunak (
 Instalasi:
 
 1. **Pasang Java 21 dan Maven.** Pastikan `java -version` dan `mvn -version` keduanya tersedia di terminal.
-2. **Pasang PostgreSQL lokal** dan jalankan service-nya pada port standar `5432`. Akun yang digunakan adalah `postgres` dengan password `irghisatya8` (lihat `dedi.database.DatabaseConnection`).
+2. **Pasang PostgreSQL lokal** dan jalankan service-nya pada port standar `5432`. Akun yang digunakan adalah `postgres` dengan password `postgres` (lihat `dedi.database.DatabaseConnection`).
 3. **Clone repository** dan masuk ke root proyek:
 
    ```bash
-   git clone <repo-url> DearDiary
+   git clone https://github.com/veinsan/IF2050-2026-K01-G12-DearDiary
    cd DearDiary
    ```
 
@@ -155,9 +155,9 @@ Indeks: `idx_laporan_id_ide (id_ide)`.
 
 | Nama Anggota             | NIM            | Kelas yang Diimplementasikan                                                                                                                                                            |
 | ------------------------ | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Riantama Putra           | _(isi NIM)_    | `dedi.Main`, `dedi.controller.LoginController`, `dedi.model.AuthModel`, `dedi.model.Pengguna`, `login.fxml` & `login.css`, `dashboard.fxml` (skeleton), `dedi.view.DasborView` (skeleton) |
-| Bryant Azraqi Mohammad   | _(isi NIM)_    | `dedi.controller.IdeInovasiController`, `dedi.controller.DetailProyekController`, `dedi.database.IdeInovasiDatabase`, `dedi.model.IdeInovasi`, `dedi.view.FormIdeInovasiView`, `dedi.view.DetailProyekView`, `form_ide_inovasi.fxml`, `detail_proyek.fxml` |
-| Mishael Gilland          | _(isi NIM)_    | `dedi.view.DasborView` (integrasi penuh), `dedi.controller.PencarianController`, `dedi.controller.PenyaringanController`, integrasi pencarian dan filter pada `dashboard.fxml`              |
-| _(anggota — NIM 18224041)_ | 18224041     | `dedi.controller.LogEksperimenController`, `dedi.database.LogEksperimenDatabase`, `dedi.model.LogEksperimen`, `dedi.view.LogEksperimenView`                                              |
-| Aldy Torafif             | _(isi NIM)_    | `dedi.controller.PrototipeController`, `dedi.database.PrototipeDatabase`, `dedi.model.Prototipe`, `dedi.view.PrototipeFormView`, `form_prototipe.fxml`                                   |
-| Herse Prabowo            | _(isi NIM)_    | `dedi.controller.LaporanController`, `dedi.model.LaporanPDF`, integrasi tabel `laporan_pdf` & ekspor PDF iText 5 pada `dedi.view.DasborView`                                              |
+| Riantama Putra           | 18224061    | `dedi.Main`, `dedi.controller.LoginController`, `dedi.model.AuthModel`, `dedi.model.Pengguna`, `login.fxml` & `login.css`, `dashboard.fxml` (skeleton), `dedi.view.DasborView` (skeleton) |
+| Bryant Azraqi Mohammad   | 18224067    | `dedi.controller.IdeInovasiController`, `dedi.controller.DetailProyekController`, `dedi.database.IdeInovasiDatabase`, `dedi.model.IdeInovasi`, `dedi.view.FormIdeInovasiView`, `dedi.view.DetailProyekView`, `form_ide_inovasi.fxml`, `detail_proyek.fxml` |
+| Mishael Gilland          | 18224005    | `dedi.view.DasborView` (integrasi penuh), `dedi.controller.PencarianController`, `dedi.controller.PenyaringanController`, integrasi pencarian dan filter pada `dashboard.fxml`              |
+| Irghi Satya Priangga             | 18224041     | `dedi.controller.LogEksperimenController`, `dedi.database.LogEksperimenDatabase`, `dedi.model.LogEksperimen`, `dedi.view.LogEksperimenView`                                              |
+| Aldyto Rafif Abhinaya             | 18224043    | `dedi.controller.PrototipeController`, `dedi.database.PrototipeDatabase`, `dedi.model.Prototipe`, `dedi.view.PrototipeFormView`, `form_prototipe.fxml`                                   |
+| Herlambang Setiaji Prabowo            | 18224113    | `dedi.controller.LaporanController`, `dedi.model.LaporanPDF`, integrasi tabel `laporan_pdf` & ekspor PDF iText 5 pada `dedi.view.DasborView`                                              |
