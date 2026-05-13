@@ -2,7 +2,7 @@
 
 Aplikasi desktop berbasis JavaFX untuk mendokumentasikan proyek inovasi internal: dari pengelolaan ide inovasi, pencatatan log eksperimen, riwayat versi prototipe, hingga ekspor laporan ke PDF. Seluruh data disimpan secara lokal pada basis data PostgreSQL tanpa ketergantungan layanan jaringan (sesuai KNF01 - *local only*).
 
-Aplikasi ini merupakan tugas besar mata kuliah **IF2050 Pengembangan Perangkat Lunak (2026, Kelas K01, Kelompok G12)**.
+Aplikasi ini merupakan tugas besar mata kuliah **IF2050 Dasar Rekayasa Perangkat Lunak (2026, Kelas K01, Kelompok G12)**.
 
 ## 1. Prasyarat dan Instalasi
 
