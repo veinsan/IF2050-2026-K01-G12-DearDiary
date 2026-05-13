@@ -74,11 +74,11 @@ mvn clean                         # membersihkan target/
 | Login & Otentikasi (UC01)      | Validasi kredensial pengguna terhadap tabel `pengguna`, sesi disimpan pada `LoginController.currentUser`, pemisahan akses berdasarkan peran Researcher / Tim R&D. | Riantama Putra       |
 | Dashboard Utama (UC02)         | Daftar ide inovasi dalam tampilan tabel, navigasi dua-klik ke detail proyek, tombol mutasi yang otomatis tersembunyi untuk peran Tim R&D. | Mishael Gilland      |
 | CRUD Ide Inovasi (UC03–UC05)   | Penambahan, pengubahan, dan penghapusan ide inovasi. `kode_inovasi` dibangkitkan otomatis (`INV-YYYYMMDD-NNNN`) dan bersifat *immutable*. | Bryant Azraqi Mohammad |
-| Log Eksperimen (UC06)          | CRUD log eksperimen yang terkait satu ide inovasi, termasuk lampiran gambar `.png`/`.jpg` (maks. 5 MB). | _(NIM 18224041)_     |
-| Riwayat Prototipe (UC07)       | Pencatatan versi prototipe yang bersifat *append-only* - rollback secara sengaja tidak didukung. | Aldy Torafif         |
+| Log Eksperimen (UC06)          | CRUD log eksperimen yang terkait satu ide inovasi, termasuk lampiran gambar `.png`/`.jpg` (maks. 5 MB). | Irghi Satya Priangga     |
+| Riwayat Prototipe (UC07)       | Pencatatan versi prototipe yang bersifat *append-only* - rollback secara sengaja tidak didukung. | Aldyto Rafif         |
 | Pencarian Ide Inovasi (UC08)   | Pencarian *substring case-insensitive* atas kolom judul, deskripsi, kategori, kode, dan penulis. | Mishael Gilland      |
 | Penyaringan Ide Inovasi (UC09) | Filter berdasarkan kategori dan/atau status (`ToDo`, `OnGoing`, `Done`) secara opsional.        | Mishael Gilland      |
-| Ekspor Laporan PDF (UC10)      | Pembuatan laporan PDF berisi detail ide inovasi, log eksperimen, dan riwayat prototipe menggunakan iText 5; metadata laporan dicatat ke tabel `laporan_pdf`. | Herse Prabowo        |
+| Ekspor Laporan PDF (UC10)      | Pembuatan laporan PDF berisi detail ide inovasi, log eksperimen, dan riwayat prototipe menggunakan iText 5; metadata laporan dicatat ke tabel `laporan_pdf`. | Herlambang Setiaji Prabowo        |
 
 ## 4. Daftar Tabel Basis Data
 
@@ -137,7 +137,7 @@ Indeks: `idx_log_id_ide (id_ide)`.
 
 Indeks: `idx_proto_id_ide (id_ide)`. **Catatan:** baris pada tabel ini tidak boleh di-`UPDATE` atau di-`DELETE` selain melalui *cascade* dari `ide_inovasi`.
 
-### `laporan_pdf` -' metadata laporan PDF (UC10)
+### `laporan_pdf` - metadata laporan PDF (UC10)
 
 | Kolom                | Tipe           | Keterangan                                                                                  |
 | -------------------- | -------------- | ------------------------------------------------------------------------------------------- |
