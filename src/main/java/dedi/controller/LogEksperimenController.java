@@ -1,12 +1,17 @@
 package dedi.controller;
 
+import dedi.Main;
 import dedi.database.LogEksperimenDatabase;
 import dedi.model.LogEksperimen;
+import dedi.view.DetailProyekView;
 import dedi.view.LogEksperimenView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 
 public class LogEksperimenController {
@@ -37,6 +42,7 @@ public class LogEksperimenController {
 
         // Event Handler Tombol
         view.btnPilihGambar.setOnAction(e -> handlePilihGambar());
+        view.btnKembali.setOnAction(e -> navigateBackToDetail());
         view.btnSimpan.setOnAction(e -> handleSimpan());
         view.btnHapus.setOnAction(e -> handleHapus());
 
@@ -150,5 +156,18 @@ public class LogEksperimenController {
         view.feedbackLabel.setText(message);
         view.feedbackLabel.setVisible(true);
         view.feedbackLabel.setManaged(true);
+    }
+
+    private void navigateBackToDetail() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dedi/view/detail_proyek.fxml"));
+            Parent root = loader.load();
+            DetailProyekView detailView = loader.getController();
+            detailView.loadProyek(idIdeAktif);
+            Main.switchRoot(root);
+        } catch (IOException e) {
+            showError("Gagal kembali ke detail proyek.");
+            e.printStackTrace();
+        }
     }
 }

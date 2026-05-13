@@ -14,6 +14,7 @@ public class LogEksperimenView extends VBox {
     public TextArea txtDetail = new TextArea();
     public TextField txtPath = new TextField();
     public Button btnPilihGambar = new Button("Pilih Gambar");
+    public Button btnKembali = new Button("Kembali");
     public Button btnSimpan = new Button("Simpan Log");
     public Button btnHapus = new Button("Hapus Terpilih");
     public Label feedbackLabel = new Label();
@@ -46,6 +47,7 @@ public class LogEksperimenView extends VBox {
         txtDetail.getStyleClass().add("form-field");
         txtPath.getStyleClass().add("form-field");
         btnPilihGambar.getStyleClass().add("secondary-button");
+        btnKembali.getStyleClass().add("secondary-button");
         btnSimpan.getStyleClass().add("primary-button");
         btnHapus.getStyleClass().add("danger-button");
         table.getStyleClass().add("ide-table");
@@ -61,7 +63,7 @@ public class LogEksperimenView extends VBox {
         grid.add(new HBox(10, txtPath, btnPilihGambar), 1, 4);
         grid.add(new Label("Preview:"), 0, 5); grid.add(imgPreview, 1, 5);
 
-        HBox buttons = new HBox(10, btnSimpan, btnHapus);
+        HBox buttons = new HBox(10, btnKembali, btnSimpan, btnHapus);
 
         // Definisi Kolom Tabel
         TableColumn<LogEksperimen, LocalDate> colTgl = new TableColumn<>("Tanggal");

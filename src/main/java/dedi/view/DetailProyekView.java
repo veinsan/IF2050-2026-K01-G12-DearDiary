@@ -258,28 +258,17 @@ public class DetailProyekView {
         });
     }
 
-    /** Placeholder — full log-entry form is a separate deliverable. */
+    /** Opens the log management page bound to the current project. */
     @FXML
     private void handleTambahLog() {
-        // Open the LogEksperimenView in a modal window bound to the current project
         if (currentIde == null) {
             showErrorAlert("Tidak ada proyek yang dipilih.");
             return;
         }
         LogEksperimenView logView = new LogEksperimenView();
         new LogEksperimenController(logView, currentIde.getIdIde());
-
-        javafx.scene.Scene scene = new javafx.scene.Scene(logView);
-        scene.getStylesheets().add(getClass().getResource("/dedi/css/app.css").toExternalForm());
-        javafx.stage.Stage stage = new javafx.stage.Stage();
-        stage.setTitle("Tambah Log Eksperimen");
-        stage.setScene(scene);
-        stage.initOwner(kodeInovasiLabel.getScene().getWindow());
-        stage.initModality(javafx.stage.Modality.WINDOW_MODAL);
-        stage.showAndWait();
-
-        // setelah modal ditutup, refresh list log pada halaman detail
-        tampilkanListLog(controller.muatListLog(currentIde.getIdIde()));
+        logView.getStylesheets().add(getClass().getResource("/dedi/css/app.css").toExternalForm());
+        Main.switchRoot(logView);
     }
 
     /** Placeholder — full prototype form is a separate deliverable. */
