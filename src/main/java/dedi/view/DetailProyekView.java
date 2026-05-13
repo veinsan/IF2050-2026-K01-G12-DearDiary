@@ -6,7 +6,6 @@ import dedi.controller.IdeInovasiController;
 import dedi.controller.LaporanController;
 import dedi.controller.LoginController;
 import dedi.controller.LogEksperimenController;
-import dedi.view.LogEksperimenView;
 import dedi.model.IdeInovasi;
 import dedi.model.LaporanPDF;
 import dedi.model.LogEksperimen;

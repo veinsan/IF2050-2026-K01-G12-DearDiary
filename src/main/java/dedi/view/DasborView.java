@@ -58,7 +58,7 @@ public class DasborView implements Initializable {
         tambahIdeButton.setVisible(isResearcher);
         tambahIdeButton.setManaged(isResearcher);
 
-        daftarIdeListView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        daftarIdeListView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         kodeCol.setCellValueFactory(d ->
             new SimpleStringProperty(nvl(d.getValue().getKodeInovasi())));

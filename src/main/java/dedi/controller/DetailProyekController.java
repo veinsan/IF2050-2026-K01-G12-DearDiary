@@ -2,7 +2,6 @@ package dedi.controller;
 
 import dedi.database.IdeInovasiDatabase;
 import dedi.database.LogEksperimenDatabase;
-import dedi.database.PrototipeDatabase;
 import dedi.model.IdeInovasi;
 import dedi.model.LogEksperimen;
 import dedi.model.Prototipe;

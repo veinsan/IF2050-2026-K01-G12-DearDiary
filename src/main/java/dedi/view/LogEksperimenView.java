@@ -68,7 +68,8 @@ public class LogEksperimenView extends VBox {
         // Definisi Kolom Tabel
         TableColumn<LogEksperimen, LocalDate> colTgl = new TableColumn<>("Tanggal");
         TableColumn<LogEksperimen, String> colTujuan = new TableColumn<>("Tujuan");
-        table.getColumns().addAll(colTgl, colTujuan);
+        table.getColumns().add(colTgl);
+        table.getColumns().add(colTujuan);
 
         getChildren().addAll(title, grid, feedbackLabel, buttons, table);
     }
