@@ -1,5 +1,7 @@
 package dedi;
 
+import java.io.FileInputStream;
+
 import dedi.database.DatabaseConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -38,7 +40,9 @@ public class Main extends Application {
         Scene scene = new Scene(root, 880, 560);
 
         stage.setTitle("DearDiary");
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/dedi/img/icon.png")));
+        stage.getIcons().add(
+            new Image(new FileInputStream("img/icon.png"))
+        );
         stage.setResizable(true);
         stage.centerOnScreen();
         stage.setScene(scene);
