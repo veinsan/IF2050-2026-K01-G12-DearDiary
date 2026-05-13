@@ -71,14 +71,14 @@ mvn clean                         # membersihkan target/
 
 | Nama Modul                     | Deskripsi                                                                                       | Pembagian            |
 | ------------------------------ | ----------------------------------------------------------------------------------------------- | -------------------- |
-| Login & Otentikasi (UC01)      | Validasi kredensial pengguna terhadap tabel `pengguna`, sesi disimpan pada `LoginController.currentUser`, pemisahan akses berdasarkan peran Researcher / Tim R&D. | Riantama Putra       |
-| Dashboard Utama (UC02)         | Daftar ide inovasi dalam tampilan tabel, navigasi dua-klik ke detail proyek, tombol mutasi yang otomatis tersembunyi untuk peran Tim R&D. | Mishael Gilland      |
-| CRUD Ide Inovasi (UC03–UC05)   | Penambahan, pengubahan, dan penghapusan ide inovasi. `kode_inovasi` dibangkitkan otomatis (`INV-YYYYMMDD-NNNN`) dan bersifat *immutable*. | Bryant Azraqi Mohammad |
-| Log Eksperimen (UC06)          | CRUD log eksperimen yang terkait satu ide inovasi, termasuk lampiran gambar `.png`/`.jpg` (maks. 5 MB). | Irghi Satya Priangga     |
-| Riwayat Prototipe (UC07)       | Pencatatan versi prototipe yang bersifat *append-only* - rollback secara sengaja tidak didukung. | Aldyto Rafif Abhinaya         |
-| Pencarian Ide Inovasi (UC08)   | Pencarian *substring case-insensitive* atas kolom judul, deskripsi, kategori, kode, dan penulis. | Mishael Gilland      |
-| Penyaringan Ide Inovasi (UC09) | Filter berdasarkan kategori dan/atau status (`ToDo`, `OnGoing`, `Done`) secara opsional.        | Mishael Gilland      |
-| Ekspor Laporan PDF (UC10)      | Pembuatan laporan PDF berisi detail ide inovasi, log eksperimen, dan riwayat prototipe menggunakan iText 5; metadata laporan dicatat ke tabel `laporan_pdf`. | Herlambang Setiaji Prabowo        |
+| Login & Otentikasi (UC01)      | Validasi kredensial pengguna terhadap tabel `pengguna`, sesi disimpan pada `LoginController.currentUser`, pemisahan akses berdasarkan peran Researcher / Tim R&D | Riantama Putra       |
+| Dashboard Utama (UC02)         | Daftar ide inovasi dalam tampilan tabel, navigasi dua-klik ke detail proyek, tombol mutasi yang otomatis tersembunyi untuk peran Tim R&D | Mishael Gilland      |
+| CRUD Ide Inovasi (UC03–UC05)   | Penambahan, pengubahan, dan penghapusan ide inovasi. `kode_inovasi` dibangkitkan otomatis (`INV-YYYYMMDD-NNNN`) dan bersifat *immutable* | Bryant Azraqi Mohammad |
+| Log Eksperimen (UC06)          | CRUD log eksperimen yang terkait satu ide inovasi, termasuk lampiran gambar `.png`/`.jpg` (maks. 5 MB) | Irghi Satya Priangga     |
+| Riwayat Prototipe (UC07)       | Pencatatan versi prototipe yang bersifat *append-only* - rollback secara sengaja tidak didukung | Aldyto Rafif Abhinaya         |
+| Pencarian Ide Inovasi (UC08)   | Pencarian *substring case-insensitive* atas kolom judul, deskripsi, kategori, kode, dan penulis | Mishael Gilland      |
+| Penyaringan Ide Inovasi (UC09) | Filter berdasarkan kategori dan/atau status (`ToDo`, `OnGoing`, `Done`) secara opsional        | Mishael Gilland      |
+| Ekspor Laporan PDF (UC10)      | Pembuatan laporan PDF berisi detail ide inovasi, log eksperimen, dan riwayat prototipe menggunakan iText 5; metadata laporan dicatat ke tabel `laporan_pdf` | Herlambang Setiaji Prabowo        |
 
 ## 4. Daftar Tabel Basis Data
 
