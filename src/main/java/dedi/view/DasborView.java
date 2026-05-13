@@ -2,8 +2,10 @@ package dedi.view;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import dedi.Main;
 import dedi.controller.LoginController;
@@ -39,6 +41,7 @@ public class DasborView implements Initializable {
     @FXML private TableColumn<IdeInovasi, String> statusCol;
     @FXML private TableColumn<IdeInovasi, String> prioritasCol;
     @FXML private TextField                      searchField;
+    @FXML private ComboBox<String>               filterKategoriCombo;
     @FXML private ComboBox<String>               filterStatusCombo;
     @FXML private Button                         tambahIdeButton;
 
@@ -80,10 +83,8 @@ public class DasborView implements Initializable {
             return row;
         });
 
-        filterStatusCombo.getItems().addAll("Semua", "ToDo", "OnGoing", "Done");
-        filterStatusCombo.getSelectionModel().selectFirst();
-
         loadDaftarIde();
+        initializeFilterOptions();
     }
 
     @FXML
@@ -95,17 +96,22 @@ public class DasborView implements Initializable {
 
     @FXML
     private void handleFilter() {
+        String kategori = filterKategoriCombo.getValue();
         String status = filterStatusCombo.getValue();
+        if ("Semua".equals(kategori)) {
+            kategori = null;
+        }
         if ("Semua".equals(status)) {
             status = null;
         }
-        List<IdeInovasi> results = penyaringanController.filterIde(null, status);
+        List<IdeInovasi> results = penyaringanController.filterIde(kategori, status);
         daftarIdeListView.getItems().setAll(results);
     }
 
     @FXML
     private void handleResetFilter() {
         searchField.clear();
+        filterKategoriCombo.getSelectionModel().selectFirst();
         filterStatusCombo.getSelectionModel().selectFirst();
         loadDaftarIde();
     }
@@ -184,6 +190,23 @@ public class DasborView implements Initializable {
 
     private void loadDaftarIde() {
         daftarIdeListView.getItems().setAll(pencarianController.muatSemuaIde());
+    }
+
+    private void initializeFilterOptions() {
+        List<IdeInovasi> allIdeas = pencarianController.muatSemuaIde();
+        List<String> kategoriOptions = allIdeas.stream()
+            .map(IdeInovasi::getKategori)
+            .filter(kategori -> kategori != null && !kategori.isBlank())
+            .distinct()
+            .sorted(Comparator.naturalOrder())
+            .collect(Collectors.toList());
+
+        filterKategoriCombo.getItems().setAll("Semua");
+        filterKategoriCombo.getItems().addAll(kategoriOptions);
+        filterKategoriCombo.getSelectionModel().selectFirst();
+
+        filterStatusCombo.getItems().setAll("Semua", "ToDo", "OnGoing", "Done");
+        filterStatusCombo.getSelectionModel().selectFirst();
     }
 
     private void showAlert(String title, String message) {

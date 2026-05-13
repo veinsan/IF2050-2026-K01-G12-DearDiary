@@ -68,8 +68,22 @@ public class LogEksperimenView extends VBox {
         // Definisi Kolom Tabel
         TableColumn<LogEksperimen, LocalDate> colTgl = new TableColumn<>("Tanggal");
         TableColumn<LogEksperimen, String> colTujuan = new TableColumn<>("Tujuan");
+        TableColumn<LogEksperimen, String> colHasil = new TableColumn<>("Hasil");
+        TableColumn<LogEksperimen, String> colKesimpulan = new TableColumn<>("Kesimpulan");
+        TableColumn<LogEksperimen, String> colDetail = new TableColumn<>("Detail");
+        TableColumn<LogEksperimen, String> colLampiran = new TableColumn<>("Lampiran");
+        colTgl.setPrefWidth(140);
+        colTujuan.setPrefWidth(180);
+        colHasil.setPrefWidth(220);
+        colKesimpulan.setPrefWidth(220);
+        colDetail.setPrefWidth(240);
+        colLampiran.setPrefWidth(260);
         table.getColumns().add(colTgl);
         table.getColumns().add(colTujuan);
+        table.getColumns().add(colHasil);
+        table.getColumns().add(colKesimpulan);
+        table.getColumns().add(colDetail);
+        table.getColumns().add(colLampiran);
 
         getChildren().addAll(title, grid, feedbackLabel, buttons, table);
     }

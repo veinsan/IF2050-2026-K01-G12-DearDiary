@@ -165,9 +165,11 @@ public class IdeInovasiDatabase {
     }
 
     /**
-     * Returns rows matching the given {@code kategori} and/or {@code status}
-     * exactly. A {@code null} argument means "any value" for that dimension;
-     * passing {@code null} for both is equivalent to {@link #getDaftarIde()}.
+     * Returns rows matching the given {@code kategori} and/or {@code status}.
+     * Category matching is case-insensitive so dropdown values stay resilient
+     * when existing data has inconsistent capitalization. A {@code null}
+     * argument means "any value" for that dimension; passing {@code null} for
+     * both is equivalent to {@link #getDaftarIde()}.
      */
     public List<IdeInovasi> filterIde(String kategori, String status) {
         StringBuilder sql = new StringBuilder("SELECT ").append(COLUMNS).append(" FROM ide_inovasi");
@@ -182,7 +184,7 @@ public class IdeInovasiDatabase {
             sql.append(" WHERE ");
             boolean first = true;
             if (kategori != null) {
-                sql.append("kategori = ?");
+                sql.append("LOWER(kategori) = LOWER(?)");
                 first = false;
             }
             if (status != null) {
