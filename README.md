@@ -16,7 +16,7 @@ Aplikasi ini merupakan tugas besar mata kuliah **IF2050 Pengembangan Perangkat L
 Instalasi:
 
 1. **Pasang Java 21 dan Maven.** Pastikan `java -version` dan `mvn -version` keduanya tersedia di terminal.
-2. **Pasang PostgreSQL lokal** dan jalankan service-nya pada port standar `5432`. Akun yang digunakan adalah `postgres` dengan password `postgres` (lihat `dedi.database.DatabaseConnection`).
+2. **Pasang PostgreSQL lokal** dan jalankan service-nya pada port standar `5432`. Sesuaikan akun dan password postgreSQL pengguna masing-masing pada `dedi.database.DatabaseConnection` pada baris `USER` dan `PASSWORD`.
 3. **Clone repository** dan masuk ke root proyek:
 
    ```bash
@@ -88,66 +88,66 @@ Skema disusun dalam Bahasa Indonesia (identifier tabel dan kolom dipertahankan a
 
 | Kolom      | Tipe           | Keterangan                                                            |
 | ---------- | -------------- | --------------------------------------------------------------------- |
-| `username` | `VARCHAR(50)`  | Primary key.                                                          |
-| `password` | `VARCHAR(255)` | *Digest* SHA-256 dalam format `sha256$<hex>`. Tidak nullable.         |
-| `role`    | `VARCHAR(20)`  | `Researcher` (CRUD penuh) atau `Tim R&D` (read-only). CHECK constraint. |
+| `username` | `VARCHAR(50)`  | Primary key                                                           |
+| `password` | `VARCHAR(255)` | *Digest* SHA-256 dalam format `sha256$<hex>`. Tidak nullable          |
+| `role`    | `VARCHAR(20)`  | `Researcher` (CRUD penuh) atau `Tim R&D` (read-only). CHECK constraint |
 
 ### `ide_inovasi` - proyek inovasi (UC02–UC05)
 
 | Kolom              | Tipe           | Keterangan                                                                                      |
 | ------------------ | -------------- | ----------------------------------------------------------------------------------------------- |
-| `id_ide`           | `SERIAL`       | Primary key, auto-increment.                                                                    |
-| `kode_inovasi`     | `VARCHAR(30)`  | Kode unik yang dibangkitkan sistem (`INV-YYYYMMDD-NNNN`), *immutable*. `NOT NULL UNIQUE`.       |
-| `judul`            | `VARCHAR(255)` | Judul ide. `NOT NULL`.                                                                          |
-| `penulis`          | `VARCHAR(100)` | Penulis ide. `NOT NULL`.                                                                        |
-| `kategori`         | `VARCHAR(100)` | Kategori ide. `NOT NULL`.                                                                       |
-| `deskripsi`        | `TEXT`         | Deskripsi panjang, boleh kosong.                                                                |
-| `tanggal_dibuat`   | `DATE`         | Default `CURRENT_DATE`. `NOT NULL`.                                                             |
-| `status`           | `VARCHAR(20)`  | `ToDo`, `OnGoing`, atau `Done`. Default `ToDo`. CHECK constraint.                               |
-| `penanggung_jawab` | `VARCHAR(100)` | Boleh kosong.                                                                                   |
-| `prioritas`        | `VARCHAR(20)`  | `Rendah`, `Sedang`, atau `Tinggi`. CHECK constraint.                                            |
+| `id_ide`           | `SERIAL`       | Primary key, auto-increment                                                                    |
+| `kode_inovasi`     | `VARCHAR(30)`  | Kode unik yang dibangkitkan sistem (`INV-YYYYMMDD-NNNN`), *immutable*. `NOT NULL UNIQUE`       |
+| `judul`            | `VARCHAR(255)` | Judul ide. `NOT NULL`                                                                          |
+| `penulis`          | `VARCHAR(100)` | Penulis ide. `NOT NULL`                                                                        |
+| `kategori`         | `VARCHAR(100)` | Kategori ide. `NOT NULL`                                                                       |
+| `deskripsi`        | `TEXT`         | Deskripsi panjang, boleh kosong                                                                |
+| `tanggal_dibuat`   | `DATE`         | Default `CURRENT_DATE`. `NOT NULL`                                                             |
+| `status`           | `VARCHAR(20)`  | `ToDo`, `OnGoing`, atau `Done`. Default `ToDo`. CHECK constraint                               |
+| `penanggung_jawab` | `VARCHAR(100)` | Boleh kosong                                                                                   |
+| `prioritas`        | `VARCHAR(20)`  | `Rendah`, `Sedang`, atau `Tinggi`. CHECK constraint                                            |
 
-Indeks: `idx_ide_status (status)`, `idx_ide_kategori (kategori)`.
+Indeks: `idx_ide_status (status)`, `idx_ide_kategori (kategori)`
 
 ### `log_eksperimen` - catatan eksperimen per ide (UC06)
 
 | Kolom               | Tipe           | Keterangan                                                                                  |
 | ------------------- | -------------- | ------------------------------------------------------------------------------------------- |
-| `id_log`            | `SERIAL`       | Primary key.                                                                                |
-| `id_ide`            | `INT`          | Foreign key ke `ide_inovasi(id_ide)` dengan `ON DELETE CASCADE`. `NOT NULL`.                |
-| `tanggal`           | `DATE`         | Default `CURRENT_DATE`. `NOT NULL`.                                                         |
-| `tujuan`            | `TEXT`         | Tujuan eksperimen.                                                                          |
-| `hasil`             | `TEXT`         | Hasil eksperimen.                                                                           |
-| `kesimpulan`        | `TEXT`         | Kesimpulan eksperimen.                                                                      |
+| `id_log`            | `SERIAL`       | Primary key                                                                                |
+| `id_ide`            | `INT`          | Foreign key ke `ide_inovasi(id_ide)` dengan `ON DELETE CASCADE`. `NOT NULL`                |
+| `tanggal`           | `DATE`         | Default `CURRENT_DATE`. `NOT NULL`                                                         |
+| `tujuan`            | `TEXT`         | Tujuan eksperimen                                                                          |
+| `hasil`             | `TEXT`         | Hasil eksperimen                                                                           |
+| `kesimpulan`        | `TEXT`         | Kesimpulan eksperimen                                                                      |
 | `detail_eksperimen` | `TEXT`         | Detail tambahan (ditambahkan via additive migration di `DatabaseConnection`).               |
-| `path_lampiran`     | `VARCHAR(500)` | Path lokal ke gambar `.png`/`.jpg` (maks. 5 MB).                                            |
+| `path_lampiran`     | `VARCHAR(500)` | Path lokal ke gambar `.png`/`.jpg` (maks. 5 MB)                                            |
 
-Indeks: `idx_log_id_ide (id_ide)`.
+Indeks: `idx_log_id_ide (id_ide)`
 
 ### `prototipe` - riwayat versi prototipe (UC07, *append-only*)
 
 | Kolom                 | Tipe           | Keterangan                                                                                  |
 | --------------------- | -------------- | ------------------------------------------------------------------------------------------- |
-| `id_prototipe`        | `SERIAL`       | Primary key.                                                                                |
-| `id_ide`              | `INT`          | Foreign key ke `ide_inovasi(id_ide)` dengan `ON DELETE CASCADE`. `NOT NULL`.                |
-| `versi`               | `VARCHAR(20)`  | Label versi semantik, mis. `v1.0`, `v1.1`. `NOT NULL`.                                      |
-| `status`              | `VARCHAR(50)`  | Status prototipe (label bebas).                                                             |
-| `deskripsi_perubahan` | `TEXT`         | Catatan perubahan pada versi ini.                                                           |
-| `tanggal_perubahan`   | `DATE`         | Default `CURRENT_DATE`. `NOT NULL`.                                                         |
+| `id_prototipe`        | `SERIAL`       | Primary key                                                                                |
+| `id_ide`              | `INT`          | Foreign key ke `ide_inovasi(id_ide)` dengan `ON DELETE CASCADE`. `NOT NULL`                |
+| `versi`               | `VARCHAR(20)`  | Label versi semantik, mis. `v1.0`, `v1.1`. `NOT NULL`                                      |
+| `status`              | `VARCHAR(50)`  | Status prototipe (label bebas)                                                             |
+| `deskripsi_perubahan` | `TEXT`         | Catatan perubahan pada versi ini                                                           |
+| `tanggal_perubahan`   | `DATE`         | Default `CURRENT_DATE`. `NOT NULL`                                                         |
 
-Indeks: `idx_proto_id_ide (id_ide)`. **Catatan:** baris pada tabel ini tidak boleh di-`UPDATE` atau di-`DELETE` selain melalui *cascade* dari `ide_inovasi`.
+Indeks: `idx_proto_id_ide (id_ide)`. **Catatan:** baris pada tabel ini tidak boleh di-`UPDATE` atau di-`DELETE` selain melalui *cascade* dari `ide_inovasi`
 
 ### `laporan_pdf` - metadata laporan PDF (UC10)
 
 | Kolom                | Tipe           | Keterangan                                                                                  |
 | -------------------- | -------------- | ------------------------------------------------------------------------------------------- |
-| `id_laporan`         | `SERIAL`       | Primary key.                                                                                |
-| `id_ide`             | `INT`          | Foreign key ke `ide_inovasi(id_ide)` dengan `ON DELETE CASCADE`. `NOT NULL`.                |
-| `nama_file`          | `VARCHAR(255)` | Nama file PDF yang dihasilkan. `NOT NULL`.                                                  |
-| `lokasi_penyimpanan` | `VARCHAR(500)` | Path direktori penyimpanan. `NOT NULL`.                                                     |
-| `tanggal_generate`   | `TIMESTAMP`    | Default `CURRENT_TIMESTAMP`. `NOT NULL`.                                                    |
+| `id_laporan`         | `SERIAL`       | Primary key                                                                                |
+| `id_ide`             | `INT`          | Foreign key ke `ide_inovasi(id_ide)` dengan `ON DELETE CASCADE`. `NOT NULL`                |
+| `nama_file`          | `VARCHAR(255)` | Nama file PDF yang dihasilkan. `NOT NULL`                                                  |
+| `lokasi_penyimpanan` | `VARCHAR(500)` | Path direktori penyimpanan. `NOT NULL`                                                     |
+| `tanggal_generate`   | `TIMESTAMP`    | Default `CURRENT_TIMESTAMP`. `NOT NULL`                                                    |
 
-Indeks: `idx_laporan_id_ide (id_ide)`.
+Indeks: `idx_laporan_id_ide (id_ide)`
 
 ## 5. Pembagian Tugas Implementasi
 
