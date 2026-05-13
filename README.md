@@ -124,7 +124,7 @@ Indeks: `idx_ide_status (status)`, `idx_ide_kategori (kategori)`.
 
 Indeks: `idx_log_id_ide (id_ide)`.
 
-### `prototipe` -' riwayat versi prototipe (UC07, *append-only*)
+### `prototipe` - riwayat versi prototipe (UC07, *append-only*)
 
 | Kolom                 | Tipe           | Keterangan                                                                                  |
 | --------------------- | -------------- | ------------------------------------------------------------------------------------------- |
