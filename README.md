@@ -43,7 +43,7 @@ Setelah itu Anda punya dua pilihan:
   psql -U postgres -d deardiary -f sql/schema.sql
   ```
 
-> **Penting:** selalu jalankan Maven dari root proyek. Auto-bootstrap menyelesaikan path `sql/schema.sql` melalui `System.getProperty("user.dir")` — menjalankan dari direktori lain akan melewati pembuatan skema secara diam-diam.
+> **Penting:** selalu jalankan Maven dari root proyek. Auto-bootstrap menyelesaikan path `sql/schema.sql` melalui `System.getProperty("user.dir")` - menjalankan dari direktori lain akan melewati pembuatan skema secara diam-diam.
 
 ### Menjalankan aplikasi
 
@@ -75,7 +75,7 @@ mvn clean                         # membersihkan target/
 | Dashboard Utama (UC02)         | Daftar ide inovasi dalam tampilan tabel, navigasi dua-klik ke detail proyek, tombol mutasi yang otomatis tersembunyi untuk peran Tim R&D. | Mishael Gilland      |
 | CRUD Ide Inovasi (UC03–UC05)   | Penambahan, pengubahan, dan penghapusan ide inovasi. `kode_inovasi` dibangkitkan otomatis (`INV-YYYYMMDD-NNNN`) dan bersifat *immutable*. | Bryant Azraqi Mohammad |
 | Log Eksperimen (UC06)          | CRUD log eksperimen yang terkait satu ide inovasi, termasuk lampiran gambar `.png`/`.jpg` (maks. 5 MB). | _(NIM 18224041)_     |
-| Riwayat Prototipe (UC07)       | Pencatatan versi prototipe yang bersifat *append-only* — rollback secara sengaja tidak didukung. | Aldy Torafif         |
+| Riwayat Prototipe (UC07)       | Pencatatan versi prototipe yang bersifat *append-only* - rollback secara sengaja tidak didukung. | Aldy Torafif         |
 | Pencarian Ide Inovasi (UC08)   | Pencarian *substring case-insensitive* atas kolom judul, deskripsi, kategori, kode, dan penulis. | Mishael Gilland      |
 | Penyaringan Ide Inovasi (UC09) | Filter berdasarkan kategori dan/atau status (`ToDo`, `OnGoing`, `Done`) secara opsional.        | Mishael Gilland      |
 | Ekspor Laporan PDF (UC10)      | Pembuatan laporan PDF berisi detail ide inovasi, log eksperimen, dan riwayat prototipe menggunakan iText 5; metadata laporan dicatat ke tabel `laporan_pdf`. | Herse Prabowo        |
@@ -84,7 +84,7 @@ mvn clean                         # membersihkan target/
 
 Skema disusun dalam Bahasa Indonesia (identifier tabel dan kolom dipertahankan apa adanya).
 
-### `pengguna` — akun pengguna sistem
+### `pengguna` - akun pengguna sistem
 
 | Kolom      | Tipe           | Keterangan                                                            |
 | ---------- | -------------- | --------------------------------------------------------------------- |
@@ -92,7 +92,7 @@ Skema disusun dalam Bahasa Indonesia (identifier tabel dan kolom dipertahankan a
 | `password` | `VARCHAR(255)` | *Digest* SHA-256 dalam format `sha256$<hex>`. Tidak nullable.         |
 | `role`    | `VARCHAR(20)`  | `Researcher` (CRUD penuh) atau `Tim R&D` (read-only). CHECK constraint. |
 
-### `ide_inovasi` — proyek inovasi (UC02–UC05)
+### `ide_inovasi` - proyek inovasi (UC02–UC05)
 
 | Kolom              | Tipe           | Keterangan                                                                                      |
 | ------------------ | -------------- | ----------------------------------------------------------------------------------------------- |
@@ -109,7 +109,7 @@ Skema disusun dalam Bahasa Indonesia (identifier tabel dan kolom dipertahankan a
 
 Indeks: `idx_ide_status (status)`, `idx_ide_kategori (kategori)`.
 
-### `log_eksperimen` — catatan eksperimen per ide (UC06)
+### `log_eksperimen` - catatan eksperimen per ide (UC06)
 
 | Kolom               | Tipe           | Keterangan                                                                                  |
 | ------------------- | -------------- | ------------------------------------------------------------------------------------------- |
@@ -124,7 +124,7 @@ Indeks: `idx_ide_status (status)`, `idx_ide_kategori (kategori)`.
 
 Indeks: `idx_log_id_ide (id_ide)`.
 
-### `prototipe` — riwayat versi prototipe (UC07, *append-only*)
+### `prototipe` -' riwayat versi prototipe (UC07, *append-only*)
 
 | Kolom                 | Tipe           | Keterangan                                                                                  |
 | --------------------- | -------------- | ------------------------------------------------------------------------------------------- |
@@ -137,7 +137,7 @@ Indeks: `idx_log_id_ide (id_ide)`.
 
 Indeks: `idx_proto_id_ide (id_ide)`. **Catatan:** baris pada tabel ini tidak boleh di-`UPDATE` atau di-`DELETE` selain melalui *cascade* dari `ide_inovasi`.
 
-### `laporan_pdf` — metadata laporan PDF (UC10)
+### `laporan_pdf` -' metadata laporan PDF (UC10)
 
 | Kolom                | Tipe           | Keterangan                                                                                  |
 | -------------------- | -------------- | ------------------------------------------------------------------------------------------- |
@@ -150,8 +150,6 @@ Indeks: `idx_proto_id_ide (id_ide)`. **Catatan:** baris pada tabel ini tidak bol
 Indeks: `idx_laporan_id_ide (id_ide)`.
 
 ## 5. Pembagian Tugas Implementasi
-
-> Daftar di bawah disusun berdasarkan riwayat *commit* pada repository. Mohon lengkapi NIM masing-masing anggota sebelum penyerahan dokumen.
 
 | Nama Anggota             | NIM            | Kelas yang Diimplementasikan                                                                                                                                                            |
 | ------------------------ | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
