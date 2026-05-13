@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -37,6 +38,7 @@ public class Main extends Application {
         Scene scene = new Scene(root, 880, 560);
 
         stage.setTitle("DearDiary");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/dedi/img/icon.png")));
         stage.setResizable(true);
         stage.centerOnScreen();
         stage.setScene(scene);
